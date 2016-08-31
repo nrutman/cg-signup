@@ -118,11 +118,27 @@ section form button[type=submit] {
     min-height: 3em;
 }
 
-.group-location, .group-type {
-    color: #1976D2;
+.group-day,
+.group-location,
+.group-time,
+.group-type {
     font-size: 0.9em;
     font-weight: bold;
     text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.group-type {
+    color: #1976D2;
+    margin-right: 1em;
+}
+
+.group-day::after {
+    content: 's';
+}
+
+.group-date-time {
+    display: inline-block;
     white-space: nowrap;
 }
 
@@ -138,6 +154,22 @@ section form button[type=submit] {
 .group-controls {
     margin: 1em 0;
     text-align: center;
+}
+
+.confirmation-modal h1 {
+    font-size: 1.5em;
+    font-weight: normal;
+}
+
+.confirmation-modal h1 strong {
+    color: #1976D2;
+    display: inline-block;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.confirmation-modal .feedback-form {
+    margin-top: 3em;
 }
 
 @media (min-width: 960px) {
@@ -157,5 +189,9 @@ section form button[type=submit] {
 
     .group:nth-child(3n) {
         border-right: none;
+    }
+
+    .confirmation-modal {
+        max-width: 50em;
     }
 }
