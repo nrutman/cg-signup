@@ -1,0 +1,161 @@
+body {
+    background-color: #eee;
+    font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    height: auto;
+    line-height: 1.5;
+    padding: 0 1em;
+}
+
+body::before, body::after {
+    content: "";
+    display: block;
+    height: 2em;
+}
+
+#container {
+    background-color: white;
+    border-radius: 1em;
+    box-shadow: 5px 5px 20px 0px rgba(0,0,0,0.37);
+    margin: 0 auto;
+    max-width: 860px;
+}
+
+#container.s {
+    max-width: 640px;
+}
+
+#container.l {
+    max-width: 1150px;
+}
+
+#container > header {
+    background-color: #1976D2;
+    border-radius: 0.5em 0.5em 0 0;
+}
+
+#container > header h1 {
+    color: white;
+    text-align: center;
+}
+
+#container > footer {
+    background-color: #1976D2;
+    border-radius: 0 0 0.5em 0.5em;
+    color: white;
+    padding: 0.5em;
+}
+
+#container > footer md-icon {
+    color: white;
+}
+
+#container > footer button[disabled] {
+    visibility: hidden;
+}
+
+section {
+    padding: 1em;
+}
+
+section h1 md-icon.material-icons {
+    color: #1976D2;
+    font-size: 2em;
+    height: 1em;
+    opacity: 0.5;
+    width: 1em;
+}
+
+section form button[type=submit] {
+    display: none;
+}
+
+.intro-logo {
+    display: block;
+    margin: 3em auto 1em;
+    max-width: 100%;
+    width: 12em;
+}
+
+.group {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    max-height: none !important;
+    position: relative;
+    transition: all 0.2s ease-out;
+    width: 100%;
+}
+
+.group:hover {
+    background-color: #ffa;
+    box-shadow: 0.2em 0.2em 0.5em rgba(0,0,0,0.2);
+    z-index: 20;
+}
+
+.group + .group {
+    border-top: none;
+}
+
+.group h2 {
+    color: #1976D2;
+    margin-bottom: 0;
+}
+
+.group-status {
+    color: #999;
+    font-weight: normal;
+    text-align: center;
+}
+
+.group-status md-icon.material-icons {
+    color: #999;
+    font-size: 1.5em;
+    height: 1em;
+    margin-top: -0.2em;
+}
+
+.group-meta {
+    margin-bottom: -1em;
+    min-height: 3em;
+}
+
+.group-location, .group-type {
+    color: #1976D2;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.group-members li {
+    border-bottom: 1px solid transparent;
+}
+
+.group-members li.empty {
+    color: #888;
+    border-bottom: 1px dotted #888;
+}
+
+.group-controls {
+    margin: 1em 0;
+    text-align: center;
+}
+
+@media (min-width: 960px) {
+    .group {
+        border: 1px solid #ddd;
+        border-left: none;
+        padding: 0 1.5em;
+    }
+
+    .group + .group {
+        border-top: 1px solid #ddd;
+    }
+
+    .group + .group + .group + .group {
+        border-top: none;
+    }
+
+    .group:nth-child(3n) {
+        border-right: none;
+    }
+}

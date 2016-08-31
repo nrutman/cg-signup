@@ -1,0 +1,201 @@
+<html>
+<head>
+    <title>Community Group Sign-Ups | Providence Church</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic,700,700italic,900,900italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+    <link rel="stylesheet" href="app.css">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-mask/1.8.7/mask.min.js"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>    <script src="app.js" charset="utf-8"></script>
+
+    <script src="app.js" charset="utf-8"></script>
+</head>
+<body ng-app="prov.cgSignup">
+    <div
+        id="container"
+        layout="column"
+        ng-class="signup.getContainerClass()"
+        ng-controller="SignupCtrl as signup">
+
+        <header>
+            <h1 class="md-display-1">Community Group Sign-Ups</h1>
+        </header>
+
+        <!-- INTRODUCTION -->
+
+        <section ng-show="signup.currentStep == 1">
+            <h1 class=".md-title">
+                <md-icon>assignment</md-icon>
+                Introduction
+            </h1>
+
+            <p>Thank you for your interest in Community Groups at Providence Church. This page will allow you to sign-up for a Community Group for our Fall 2016 Core Session.</p>
+            <blockquote>
+                <strong>Session Start:</strong> October 1, 2016<br>
+                <strong>Session End:</strong> November 30, 2016
+            </blockquote>
+
+            <img src="provchurch-logo.png" class="intro-logo" alt="Providence Church">
+        </section>
+
+        <!-- ABOUT YOU -->
+
+        <section ng-show="signup.currentStep == 2">
+            <h1 class=".md-title">
+                <md-icon>account_circle</md-icon>
+                About You
+            </h1>
+
+            <p>Before selecting a group, please tell us who you are&hellip;</p>
+
+            <form
+                layout-gt-sm="row"
+                layout-align="space-around center"
+                layout-wrap
+                name="signup.aboutForm"
+                ng-submit="signup.next()">
+
+                <md-input-container flex="45">
+                    <label>First Name</label>
+                    <input
+                        name="firstName"
+                        ng-model="signup.data.firstName"
+                        required>
+                </md-input-container>
+
+                <md-input-container flex="45">
+                    <label>Last Name</label>
+                    <input
+                        name="lastName"
+                        ng-model="signup.data.lastName"
+                        required>
+                </md-input-container>
+
+                <md-input-container flex="45">
+                    <label>Phone Number</label>
+                    <input
+                        name="phone"
+                        ng-model="signup.data.phone"
+                        placeholder=""
+                        required
+                        ui-mask="(999) 999-9999"
+                        ui-mask-placeholder
+                        ui-mask-placeholder-char="space">
+                </md-input-container>
+
+                <md-input-container flex="45">
+                    <label>Email Address</label>
+                    <input
+                        ng-model="signup.data.email"
+                        required
+                        type="email">
+                </md-input-container>
+
+                <md-button type="submit">Submit</md-button>
+
+            </form>
+        </section>
+
+        <!-- FIND A GROUP-->
+
+        <section ng-show="signup.currentStep == 3" layout="column">
+            <h1 class=".md-title">
+                <md-icon>find_in_page</md-icon>
+                Find a Group
+            </h1>
+
+            <div
+                class="groups"
+                layout="row"
+                layout-sm="column"
+                layout-xs="column"
+                layout-align="space-between start"
+                layout-padding
+                layout-wrap>
+                <div
+                    flex-gt-sm="33"
+                    ng-class="signup.getGroupClasses(group)"
+                    ng-repeat="group in signup.groups track by $index">
+                    <h2 layout="row" layout-align="space-between start">
+                        <span class="group-name" flex="auto" ng-bind="group.name"></span>
+                        <span
+                            class="group-status"
+                            flex="25"
+                            title="{{signup.getGroupCountLanguage(group.members.length)}}"
+                            >
+                            <span ng-bind="group.members.length"></span>
+                            <md-icon>people</md-icon>
+                        </span>
+                    </h2>
+                    <div class="group-meta">
+                        A
+                        <span class="group-type" ng-bind="group.type"></span>
+                        group meeting in
+                        <span class="group-location" ng-bind="group.location"></span>.
+                    </div>
+                    <ol class="group-members">
+                        <li ng-repeat="member in group.members">
+                            <span class="group-member-name" ng-bind="member.full_name"></span>
+                        </li>
+                        <li
+                            ng-repeat="i in signup.getGroupEmptyCount(group.name) track by $index"
+                            class="empty">
+                            &nbsp;
+                        </li>
+                    </ol>
+                    <div class="group-controls">
+                        <md-button
+                            class="md-raised md-primary"
+                            ng-click="signup.joinGroup(group.id)"
+                            >
+                            <md-icon>person_add</md-icon>
+                            Join This Group
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- THANKS -->
+
+        <section ng-show="signup.currentStep == 4">
+            <h1 class=".md-title">
+                <md-icon>sentiment_satisfied</md-icon>
+                Thanks!
+            </h1>
+        </section>
+
+        <footer
+            class="progress md-primary"
+            layout="rows"
+            layout-align="space-around center">
+            <md-button
+                ng-click="signup.previous()"
+                ng-disabled="signup.currentStep <= 1"
+                title="Previous Step">
+                <md-icon>keyboard_arrow_left</md-icon>
+                Previous
+            </md-button>
+            <span class="progress">
+                <span ng-bind="signup.currentStep"></span>
+                /
+                <span ng-bind="signup.totalSteps"></span>
+            </span>
+            <md-button
+                ng-click="signup.next()"
+                ng-disabled="signup.currentStep >= signup.totalSteps"
+                title="Next Step">
+                Next
+                <md-icon>keyboard_arrow_right</md-icon>
+            </md-button>
+        </footer>
+
+    </div>
+</body>
+</html>
