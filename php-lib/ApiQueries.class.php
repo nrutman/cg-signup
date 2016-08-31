@@ -3,8 +3,8 @@
 class ApiQueries {
 
     const INSERT_SIGNUP_SQL = <<<'SQL'
-INSERT INTO cg_signups (group_id, first_name, last_name, email, phone)
-VALUES (:group_id, :first_name, :last_name, :email, :phone)
+INSERT INTO cg_signups (group_id, first_name, last_name, email, phone, created_at)
+VALUES (:group_id, :first_name, :last_name, :email, :phone, NOW())
 ;
 SQL;
 
@@ -27,7 +27,7 @@ SQL;
 SELECT s.*, g.name as group_name
 FROM cg_signups s
 JOIN cg_groups g ON s.group_id = g.id
-ORDER BY s.is_leader DESC, s.last_name ASC, s.first_name ASC
+ORDER BY s.is_leader DESC, s.id ASC
 ;
 SQL;
 
