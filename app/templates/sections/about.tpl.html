@@ -1,0 +1,53 @@
+<h1 class=".md-title">
+    <md-icon>account_circle</md-icon>
+    About You
+</h1>
+
+<p>Before selecting a group, please tell us who you are&hellip;</p>
+
+<form
+    layout-gt-sm="row"
+    layout-align="space-around center"
+    layout-wrap
+    name="signup.aboutForm"
+    ng-submit="signup.next()">
+
+    <md-input-container flex="45">
+        <label>First Name</label>
+        <input
+            name="firstName"
+            ng-model="signup.data.firstName"
+            required>
+    </md-input-container>
+
+    <md-input-container flex="45">
+        <label>Last Name</label>
+        <input
+            name="lastName"
+            ng-model="signup.data.lastName"
+            required>
+    </md-input-container>
+
+    <md-input-container flex="45">
+        <label>Phone Number</label>
+        <input
+            name="phone"
+            ng-model="signup.data.phone"
+            placeholder=""
+            required
+            ui-mask="(999) 999-9999"
+            ui-mask-placeholder
+            ui-mask-placeholder-char="space">
+    </md-input-container>
+
+    <md-input-container flex="45">
+        <label>Email Address</label>
+        <input
+            ng-model="signup.data.email"
+            required
+            type="email">
+    </md-input-container>
+
+    <md-button type="submit">Submit</md-button>
+
+</form>

@@ -1,0 +1,57 @@
+<h1 class=".md-title">
+    <md-icon>find_in_page</md-icon>
+    Find a Group
+</h1>
+
+<div
+    class="groups"
+    layout="row"
+    layout-sm="column"
+    layout-xs="column"
+    layout-align="space-between start"
+    layout-padding
+    layout-wrap>
+    <div
+        flex-gt-sm="33"
+        ng-class="signup.getGroupClasses(group)"
+        ng-repeat="group in signup.groups track by $index">
+        <h2 layout="row" layout-align="space-between start">
+            <span class="group-name" flex="auto" ng-bind="group.name"></span>
+            <span
+                class="group-status"
+                flex="25"
+                title="{{signup.getGroupCountLanguage(group.members.length)}}"
+                >
+                <span ng-bind="group.members.length"></span>
+                <md-icon>people</md-icon>
+            </span>
+        </h2>
+        <div class="group-meta">
+            <span class="group-type" ng-bind="signup.getFormattedGroupType(group.type)"></span>
+            <span class="group-date-time">
+                <span class="group-day" ng-bind="group.day"></span>
+                at
+                <span class="group-time" ng-bind="group.time | time"></span>
+            </span>
+        </div>
+        <ol class="group-members">
+            <li ng-repeat="member in group.members">
+                <span class="group-member-name" ng-bind="member.full_name"></span>
+            </li>
+            <li
+                ng-repeat="i in signup.getGroupEmptyCount(group.name) track by $index"
+                class="empty">
+                &nbsp;
+            </li>
+        </ol>
+        <div class="group-controls">
+            <md-button
+                class="md-raised md-primary"
+                ng-click="signup.joinGroup(group.id)"
+                >
+                <md-icon>person_add</md-icon>
+                Join This Group
+            </md-button>
+        </div>
+    </div>
+</div>
