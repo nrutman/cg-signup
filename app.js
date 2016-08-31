@@ -7,11 +7,14 @@
         .constant('MAX_MEMBERS', 12)
         // configuration
         .config(MdThemeConfig)
+        // filters
+        .filter('time', TimeFilter)
         // services
         .service('apiService', ApiService)
         .service('groupService', GroupService)
         .service('signupService', SignupService)
         // controllers
+        .controller('ConfirmationModalCtrl', ConfirmationModalCtrl)
         .controller('SignupCtrl', SignupCtrl)
         // run block
         .run(AppRun);
@@ -43,6 +46,27 @@
             }
 
             return $http(config);
+        }
+    }
+
+    /**
+     * @ngdoc Controller
+     * @name ConfirmationModalCtrl
+     * @description Controller for the group selection confirmation modal
+     */
+    function ConfirmationModalCtrl($mdDialog) {
+        var self = this;
+        self.complete = complete;
+        self.data = {
+            firstPreference: true,
+            preferenceNotes: '',
+            notes: ''
+        };
+        self.groups = self.groups || [];
+        self.selectedGroup = self.selectedGroup || {};
+
+        function complete() {
+            $mdDialog.hide();
         }
     }
 
@@ -96,16 +120,17 @@
      * @ngdoc Controller
      * @name signupCtrl
      * @description Controller for the main sign-up page
-     * @requires $uibModal
+     * @requires $mdDialog
      * @requires $q
      * @requires groupService
      * @requires signupService
      */
-    function SignupCtrl($q, groupService, signupService, MAX_MEMBERS) {
+    function SignupCtrl($mdDialog, $q, groupService, signupService, MAX_MEMBERS) {
         var self = this;
         self.getContainerClass = getContainerClass;
         self.currentStep = 3;
         self.data = {};
+        self.getFormattedGroupType = getFormattedGroupType;
         self.getGroupClasses = getGroupClasses;
         self.getGroupCountLanguage = getGroupCountLanguage;
         self.getGroupEmptyCount = getGroupEmptyCount;
@@ -140,6 +165,13 @@
         function getContainerClass() {
             var containerClasses = ['s', 's', 'l', 's'];
             return containerClasses[self.currentStep - 1];
+        }
+
+        function getFormattedGroupType(name) {
+            if (name.indexOf('Famil') > -1) {
+                return name;
+            }
+            return name + ' Group';
         }
 
         function getGroupClasses(group) {
@@ -188,7 +220,18 @@
                 email: self.data.email,
                 phone: self.data.phone
             };
-            signupService.create(newSignup);
+            signupService.create(newSignup).then(function() {
+                $mdDialog.show({
+                    bindToController: true,
+                    controller: 'ConfirmationModalCtrl as ctrl',
+                    escapeToClose: false,
+                    locals: {
+                        groups: self.groups,
+                        selectedGroup: self.groups[groupMapById[groupId]]
+                    },
+                    templateUrl: 'app/templates/confirmationModal.tpl.html'
+                }).then(submitFeedback);
+            });
         }
 
         function previous() {
@@ -217,11 +260,31 @@
             }
         }
 
+        function submitFeedback() {
+            //
+            // TODO: Post the updated response
+            //
+            self.currentStep++;
+        }
+
         function validateStep2() {
             return self.aboutForm.$invalid;
         }
 
         function validateStep3() {}
+    }
+
+    function TimeFilter($filter) {
+        return function(input) {
+            var pieces = input.split(':');
+            var pieceTypes = ['Hours', 'Minutes', 'Seconds', 'Milliseconds'];
+            var dateTime = new Date();
+            for (var i=0; i<pieceTypes.length; i++) {
+                var value = (pieces.length >= i + 1) ? pieces[i] : 0;
+                dateTime['set' + pieceTypes[i]](value);
+            }
+            return $filter('date')(dateTime, 'shortTime');
+        };
     }
 
     /**

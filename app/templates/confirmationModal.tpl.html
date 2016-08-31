@@ -1,0 +1,40 @@
+<md-dialog class="confirmation-modal">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>One More Thing&hellip;</h2>
+        </div>
+    </md-toolbar><md-dialog-content layout="column">
+        <div class="md-dialog-content">
+            <h1>You have successfully registered for the <strong ng-bind="ctrl.selectedGroup.name"></strong> group!</h1>
+
+            <p>
+                This is a
+                <strong ng-bind="ctrl.selectedGroup.type"></strong>
+                group that meets on
+                <strong ng-bind="ctrl.selectedGroup.day + 's'"></strong>
+                at
+                <strong ng-bind="ctrl.selectedGroup.time | time"></strong>
+                in
+                <strong ng-bind="ctrl.selectedGroup.location"></strong>.
+            </p>
+
+            <div class="feedback-form">
+                <md-checkbox ng-model="ctrl.data.firstPreference">This was my first preference.</md-checkbox>
+                <md-input-container class="md-block" ng-hide="ctrl.data.firstPreference">
+                    <label>What group did you prefer and why?</label>
+                    <textarea ng-model="ctrl.data.preferenceNotes" rows="5" md-select-on-focus></textarea>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>Do you have any other feedback that you would like to give us?</label>
+                    <textarea ng-model="ctrl.data.notes" rows="5" md-select-on-focus></textarea>
+                </md-input-container>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button ng-click="ctrl.complete()" class="md-primary">
+            <md-icon>check</md-icon>
+            Complete
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

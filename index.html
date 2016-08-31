@@ -134,10 +134,12 @@
                         </span>
                     </h2>
                     <div class="group-meta">
-                        A
-                        <span class="group-type" ng-bind="group.type"></span>
-                        group meeting in
-                        <span class="group-location" ng-bind="group.location"></span>.
+                        <span class="group-type" ng-bind="signup.getFormattedGroupType(group.type)"></span>
+                        <span class="group-date-time">
+                            <span class="group-day" ng-bind="group.day"></span>
+                            at
+                            <span class="group-time" ng-bind="group.time | time"></span>
+                        </span>
                     </div>
                     <ol class="group-members">
                         <li ng-repeat="member in group.members">
