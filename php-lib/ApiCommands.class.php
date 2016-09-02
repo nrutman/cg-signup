@@ -11,12 +11,14 @@ class ApiCommands {
         $this->db = new ApiDbConnection();
     }
 
-    protected function query($query) {
-        return $this->db->get_connection()->query($query);
+    protected function getSignupsForGroup($groupId) {
+        $statement = $this->db->getConnection()->prepare(ApiQueries::SELECT_SIGNUPS_FOR_GROUP_SQL);
+        $statement->execute(array('group_id' => $groupId));
+        return $statement->fetchAll();
     }
 
     protected function insert($query, $values) {
-        $statement = $this->db->get_connection()->prepare($query);
+        $statement = $this->db->getConnection()->prepare($query);
         $result = $statement->execute($values);
         if (!result) {
             throw new DbInsertFailedException();
@@ -24,27 +26,35 @@ class ApiCommands {
         return $result;
     }
 
-    protected function return_one($value) {
+    protected function query($query) {
+        return $this->db->getConnection()->query($query);
+    }
+
+    protected function returnOne($value) {
         if (!is_array($value) || count($value) < 1) {
             return null;
         }
         return $value[0];
     }
 
-    public function get_groups() {
+    /**
+     * Action Methods
+     */
+
+    public function getGroupsAction() {
         return $this->query(ApiQueries::SELECT_GROUPS_SQL)->fetchAll();
     }
 
-    public function get_signups() {
+    public function getSignupsAction() {
         return $this->query(ApiQueries::SELECT_SIGNUPS_SQL)->fetchAll();
     }
 
-    public function post_signup($signup) {
-        $signups = $this->get_signups();
+    public function postSignupAction($data) {
+        $signups = $this->getSignupsForGroup($data['groupId']);
         if (count($signups) >= self::MAX_SIGNUPS) {
             throw new GroupFullException();
         }
-        $signup = array_intersect_key($signup, array(
+        $signup = array_intersect_key($data, array(
             'group_id' => 1,
             'first_name' => 1,
             'last_name' => 1,
@@ -52,7 +62,7 @@ class ApiCommands {
             'phone' => 1
         ));
         $this->insert(ApiQueries::INSERT_SIGNUP_SQL, $signup);
-        return $this->return_one($this->query(ApiQueries::SELECT_LAST_SIGNUP_SQL)->fetchAll());
+        return $this->returnOne($this->query(ApiQueries::SELECT_LAST_SIGNUP_SQL)->fetchAll());
     }
 
 }

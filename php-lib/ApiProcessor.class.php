@@ -10,7 +10,7 @@ class ApiProcessor {
     }
 
     public function processRequest($object, $data) {
-        $method = strtolower($_SERVER['REQUEST_METHOD']) . '_' . $object;
+        $method = strtolower($_SERVER['REQUEST_METHOD']) . ucfirst($object) . 'Action';
 
         if (empty($object)) {
             throw new ObjectNotSpecifiedException();
@@ -22,4 +22,5 @@ class ApiProcessor {
 
         return call_user_func(array($this->commands, $method), $data);
     }
+
 }

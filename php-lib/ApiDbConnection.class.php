@@ -21,7 +21,7 @@ class ApiDbConnection {
         $this->conn = new PDO($dsn, $user, $pass, $opt);
     }
 
-    public function get_connection() {
+    public function getConnection() {
         return $this->conn;
     }
 }

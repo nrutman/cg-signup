@@ -23,6 +23,15 @@ LIMIT 1
 ;
 SQL;
 
+    const SELECT_SIGNUPS_FOR_GROUP_SQL = <<<'SQL'
+SELECT s.*, g.name as group_name
+FROM cg_signups s
+JOIN cg_groups g ON s.group_id = g.id
+WHERE g.id = :group_id
+ORDER BY s.is_leader DESC, s.id ASC
+;
+SQL;
+
     const SELECT_SIGNUPS_SQL = <<<'SQL'
 SELECT s.*, g.name as group_name
 FROM cg_signups s

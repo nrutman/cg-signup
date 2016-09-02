@@ -26,7 +26,7 @@ abstract class CustomException extends Exception implements IException {
     protected $line;                              // Source line of exception
     private   $trace;                             // Unknown
 
-    protected function call_parent() {
+    protected function callParent() {
         parent::__construct($this->message, $this->code);
     }
 
@@ -37,7 +37,7 @@ abstract class CustomException extends Exception implements IException {
         if ($code) {
             $this->code = $code;
         }
-        $this->call_parent();
+        $this->callParent();
     }
 
     public function __toString() {
