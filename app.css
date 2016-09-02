@@ -85,7 +85,7 @@ section form button[type=submit] {
     width: 100%;
 }
 
-.group:hover {
+.group.group-open:hover {
     background-color: #ffa;
     box-shadow: 0.2em 0.2em 0.5em rgba(0,0,0,0.2);
     z-index: 20;
@@ -151,9 +151,28 @@ section form button[type=submit] {
     border-bottom: 1px dotted #888;
 }
 
+.group-member-is-leader {
+    background-color: rgba(150, 150, 150, 0.3);
+    border-radius: 0.5em;
+    display: inline-block;
+    font-weight: bold;
+    font-size: 0.7em;
+    margin-left: 0.2em;
+    padding: 0.2em 0.6em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    vertical-align: text-bottom;
+}
+
 .group-controls {
     margin: 1em 0;
     text-align: center;
+}
+
+.group-full h2,
+.group-full .group-type,
+.group-full .group-date-time {
+    color: rgba(0,0,0,0.38);
 }
 
 .confirmation-modal h1 {

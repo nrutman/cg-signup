@@ -6,16 +6,20 @@
         // constants
         .constant('MAX_MEMBERS', 12)
         // configuration
+        .config(HttpInterceptorConfig)
         .config(MdThemeConfig)
         // filters
         .filter('time', TimeFilter)
         // services
         .service('apiService', ApiService)
+        .service('errorService', ErrorService)
         .service('groupService', GroupService)
         .service('signupService', SignupService)
         // controllers
         .controller('ConfirmationModalCtrl', ConfirmationModalCtrl)
         .controller('SignupCtrl', SignupCtrl)
+        // decorators
+        .decorator('$exceptionHandler', ExceptionHandlerDecorator)
         // run block
         .run(AppRun);
 
@@ -71,6 +75,49 @@
     }
 
     /**
+     * @ngdoc service
+     * @name errorService
+     * @description Logic surrounding handling and displaying errors
+     * @requires $mdDialog
+     */
+    function ErrorService($mdDialog) {
+        var self = this;
+        self.showError = showError;
+
+        var defaultTitle = 'Oops! An error occurred!';
+        var defaultMessage = 'Please refresh your browser and try again or contact the church office.';
+
+        function showError(title, message) {
+            return $mdDialog.show(
+                $mdDialog.alert()
+                    .clickOutsideToClose(true)
+                    .title(title || defaultTitle)
+                    .textContent(message || defaultMessage)
+                    .ok('Got it!')
+            );
+        }
+    }
+
+    /**
+     * @ngdoc decorator
+     * @name ExceptionHandlerDecorator
+     * @description Decorates $exceptionHandler with custom error logic
+     * @requires $delegate
+     * @requires $injector
+     */
+    function ExceptionHandlerDecorator($delegate, $injector) {
+        return function(exception, cause) {
+            var errorService = $injector.get('errorService');
+
+            // show an alert
+            errorService.showError();
+
+            // run the delegate
+            $delegate(exception, cause);
+        };
+    }
+
+    /**
      * @ngdoc Service
      * @name GroupService
      * @description Logic for fetching and storing groups
@@ -88,6 +135,22 @@
                 return response.data;
             });
         }
+    }
+
+    /**
+     * @ngdoc Config
+     * @name HttpInterceptorConfig
+     * @description Configures interceptors for the $http service
+     * @requires $httpProvider
+     */
+    function HttpInterceptorConfig($httpProvider) {
+        $httpProvider.interceptors.push(function() {
+            return {
+                'responseError': function(config) {
+                    throw new Error('An http request failed');
+                }
+            };
+        });
     }
 
     /**
@@ -128,13 +191,14 @@
     function SignupCtrl($mdDialog, $q, groupService, signupService, MAX_MEMBERS) {
         var self = this;
         self.getContainerClass = getContainerClass;
-        self.currentStep = 1;
+        self.currentStep = 3;
         self.data = {};
         self.getFormattedGroupType = getFormattedGroupType;
         self.getGroupClasses = getGroupClasses;
         self.getGroupCountLanguage = getGroupCountLanguage;
         self.getGroupEmptyCount = getGroupEmptyCount;
         self.groups = [];
+        self.isGroupFull = isGroupFull;
         self.joinGroup = joinGroup;
         self.next = next;
         self.previous = previous;
@@ -177,8 +241,8 @@
         function getGroupClasses(group) {
             classes = ['group'];
 
-            if (group.members.length >= MAX_MEMBERS) {
-                classes.push('group-closed');
+            if (isGroupFull(group)) {
+                classes.push('group-full');
             } else {
                 classes.push('group-open');
             }
@@ -210,6 +274,10 @@
             if (group === null) return new Array(0);
 
             return new Array(MAX_MEMBERS - group.members.length);
+        }
+
+        function isGroupFull(group) {
+            return (group.members.length >= MAX_MEMBERS);
         }
 
         function joinGroup(groupId) {
