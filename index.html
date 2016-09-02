@@ -20,8 +20,8 @@
     <div
         id="container"
         layout="column"
-        ng-class="signup.getContainerClass()"
-        ng-controller="SignupCtrl as signup">
+        ng-class="app.getContainerClass()"
+        ng-controller="AppCtrl as app">
 
         <header>
             <h1 class="md-display-1">Community Group Sign-Ups</h1>
@@ -29,26 +29,26 @@
 
         <!-- INTRODUCTION -->
         <section
-            ng-show="signup.currentStep == 1"
+            ng-show="app.currentStep == 1"
             ng-include="'app/templates/sections/introduction.tpl.html'">
         </section>
 
         <!-- ABOUT YOU -->
         <section
-            ng-show="signup.currentStep == 2"
+            ng-show="app.currentStep == 2"
             ng-include="'app/templates/sections/about.tpl.html'">
         </section>
 
         <!-- FIND A GROUP-->
         <section
-            ng-show="signup.currentStep == 3"
+            ng-show="app.currentStep == 3"
             ng-include="'app/templates/sections/groups.tpl.html'"
             layout="column">
         </section>
 
         <!-- THANKS -->
         <section
-            ng-show="signup.currentStep == 4"
+            ng-show="app.currentStep == 4"
             ng-include="'app/templates/sections/thanks.tpl.html'">
         </section>
 
@@ -57,20 +57,20 @@
             layout="rows"
             layout-align="space-around center">
             <md-button
-                ng-click="signup.previous()"
-                ng-disabled="signup.currentStep <= 1"
+                ng-click="app.previous()"
+                ng-disabled="app.currentStep <= 1"
                 title="Previous Step">
                 <md-icon>keyboard_arrow_left</md-icon>
                 Previous
             </md-button>
             <span class="progress">
-                <span ng-bind="signup.currentStep"></span>
+                <span ng-bind="app.currentStep"></span>
                 /
-                <span ng-bind="signup.totalSteps"></span>
+                <span ng-bind="app.totalSteps"></span>
             </span>
             <md-button
-                ng-click="signup.next()"
-                ng-disabled="signup.currentStep >= signup.totalSteps"
+                ng-click="app.next()"
+                ng-disabled="app.currentStep >= app.totalSteps"
                 title="Next Step">
                 Next
                 <md-icon>keyboard_arrow_right</md-icon>

@@ -16,8 +16,8 @@
         .service('groupService', GroupService)
         .service('signupService', SignupService)
         // controllers
+        .controller('AppCtrl', AppCtrl)
         .controller('ConfirmationModalCtrl', ConfirmationModalCtrl)
-        .controller('SignupCtrl', SignupCtrl)
         // decorators
         .decorator('$exceptionHandler', ExceptionHandlerDecorator)
         // run block
@@ -39,11 +39,11 @@
         var self = this;
         self.request = request;
 
-        function request(method, object, data) {
-            var config = {
+        function request(method, object, data, additionalConfig) {
+            var config = angular.extend({
                 method: method,
                 url: '/api.php?object=' + object
-            };
+            }, additionalConfig);
 
             if (data) {
                 config.data = data;
@@ -55,140 +55,15 @@
 
     /**
      * @ngdoc Controller
-     * @name ConfirmationModalCtrl
-     * @description Controller for the group selection confirmation modal
-     */
-    function ConfirmationModalCtrl($mdDialog) {
-        var self = this;
-        self.complete = complete;
-        self.data = {
-            firstPreference: true,
-            preferenceNotes: '',
-            notes: ''
-        };
-        self.groups = self.groups || [];
-        self.selectedGroup = self.selectedGroup || {};
-
-        function complete() {
-            $mdDialog.hide();
-        }
-    }
-
-    /**
-     * @ngdoc service
-     * @name errorService
-     * @description Logic surrounding handling and displaying errors
-     * @requires $mdDialog
-     */
-    function ErrorService($mdDialog) {
-        var self = this;
-        self.showError = showError;
-
-        var defaultTitle = 'Oops! An error occurred!';
-        var defaultMessage = 'Please refresh your browser and try again or contact the church office.';
-
-        function showError(title, message) {
-            return $mdDialog.show(
-                $mdDialog.alert()
-                    .clickOutsideToClose(true)
-                    .title(title || defaultTitle)
-                    .textContent(message || defaultMessage)
-                    .ok('Got it!')
-            );
-        }
-    }
-
-    /**
-     * @ngdoc decorator
-     * @name ExceptionHandlerDecorator
-     * @description Decorates $exceptionHandler with custom error logic
-     * @requires $delegate
-     * @requires $injector
-     */
-    function ExceptionHandlerDecorator($delegate, $injector) {
-        return function(exception, cause) {
-            var errorService = $injector.get('errorService');
-
-            // show an alert
-            errorService.showError();
-
-            // run the delegate
-            $delegate(exception, cause);
-        };
-    }
-
-    /**
-     * @ngdoc Service
-     * @name GroupService
-     * @description Logic for fetching and storing groups
-     * @requires apiService
-     */
-    function GroupService(apiService) {
-        var self = this;
-        self.fetch = fetch;
-
-        var groups = [];
-
-        function fetch() {
-            return apiService.request('GET', 'groups')
-            .then(function(response) {
-                return response.data;
-            });
-        }
-    }
-
-    /**
-     * @ngdoc Config
-     * @name HttpInterceptorConfig
-     * @description Configures interceptors for the $http service
-     * @requires $httpProvider
-     */
-    function HttpInterceptorConfig($httpProvider) {
-        $httpProvider.interceptors.push(function() {
-            return {
-                'responseError': function(config) {
-                    throw new Error('An http request failed');
-                }
-            };
-        });
-    }
-
-    /**
-     * @ngdoc Service
-     * @name SignupService
-     * @description Logic for fetching and storing signups
-     * @requires apiService
-     */
-    function SignupService(apiService) {
-        var self = this;
-        self.fetch = fetch;
-        self.create = create;
-
-        var signups = [];
-
-        function create(signup) {
-            return apiService.request('POST', 'signup', signup);
-        }
-
-        function fetch() {
-            return apiService.request('GET', 'signups')
-                .then(function(response) {
-                    return response.data;
-                });
-        }
-    }
-
-
-    /**
-     * @ngdoc Controller
-     * @name signupCtrl
+     * @name AppCtrl
      * @description Controller for the main sign-up page
      * @requires $mdDialog
      * @requires $q
+     * @requires errorService
      * @requires groupService
      * @requires signupService
      */
-    function SignupCtrl($mdDialog, $q, groupService, signupService, MAX_MEMBERS) {
+    function AppCtrl($mdDialog, $q, errorService, groupService, signupService, MAX_MEMBERS) {
         var self = this;
         self.getContainerClass = getContainerClass;
         self.currentStep = 1;
@@ -204,7 +79,7 @@
         self.previous = previous;
         self.totalSteps = 4;
 
-        var validationMethods = [angular.noop, validateStep2, validateStep3];
+        var validationMethods = [angular.noop, validateAboutForm, angular.noop];
         var groupMapByName;
         var groupMapById;
 
@@ -271,7 +146,7 @@
                 }
             }
 
-            if (group === null) return new Array(0);
+            if (group === null || group.members.length >= MAX_MEMBERS) return new Array(0);
 
             return new Array(MAX_MEMBERS - group.members.length);
         }
@@ -288,7 +163,7 @@
                 email: self.data.email,
                 phone: self.data.phone
             };
-            signupService.create(newSignup).then(function() {
+            signupService.create(newSignup, angular.noop).then(function() {
                 $mdDialog.show({
                     bindToController: true,
                     controller: 'ConfirmationModalCtrl as ctrl',
@@ -299,6 +174,16 @@
                     },
                     templateUrl: 'app/templates/modals/confirmationModal.tpl.html'
                 }).then(submitFeedback);
+            }, function(response) {
+                if (response.data.code == 3) {
+                    // group is full
+                    errorService.showFullGroup();
+                    initialize();
+                    return;
+                }
+
+                // default error handling
+                errorService.showError();
             });
         }
 
@@ -316,8 +201,12 @@
             });
 
             angular.forEach(signupData, function(signup, i) {
+                var group = self.groups[groupMapByName[signup.group_name]];
+                if (group.members.length >= MAX_MEMBERS) {
+                    return;
+                }
                 signup.full_name = [signup.first_name, signup.last_name].join(' ');
-                self.groups[groupMapByName[signup.group_name]].members.push(signup);
+                group.members.push(signup);
             });
 
         }
@@ -335,11 +224,149 @@
             self.currentStep++;
         }
 
-        function validateStep2() {
+        function validateAboutForm() {
             return self.aboutForm.$invalid;
         }
+    }
 
-        function validateStep3() {}
+    /**
+     * @ngdoc Controller
+     * @name ConfirmationModalCtrl
+     * @description Controller for the group selection confirmation modal
+     */
+    function ConfirmationModalCtrl($mdDialog) {
+        var self = this;
+        self.complete = complete;
+        self.data = {
+            firstPreference: true,
+            preferenceNotes: '',
+            notes: ''
+        };
+        self.groups = self.groups || [];
+        self.selectedGroup = self.selectedGroup || {};
+
+        function complete() {
+            $mdDialog.hide();
+        }
+    }
+
+    /**
+     * @ngdoc service
+     * @name errorService
+     * @description Logic surrounding handling and displaying errors
+     * @requires $mdDialog
+     */
+    function ErrorService($mdDialog) {
+        var self = this;
+        self.showError = showError;
+        self.showFullGroup = showFullGroup;
+
+        var defaultTitle = 'Oops! An error occurred!';
+        var defaultMessage = 'Please refresh your browser and try again or contact the church office.';
+
+        function showError(title, message) {
+            return $mdDialog.show(
+                $mdDialog.alert()
+                    .clickOutsideToClose(true)
+                    .title(title || defaultTitle)
+                    .textContent(message || defaultMessage)
+                    .ok('Got it!')
+            );
+        }
+
+        function showFullGroup() {
+            return showError('Bummer! That group is now full.', 'The groups have been updated. Please select a different group.');
+        }
+    }
+
+    /**
+     * @ngdoc decorator
+     * @name ExceptionHandlerDecorator
+     * @description Decorates $exceptionHandler with custom error logic
+     * @requires $delegate
+     * @requires $injector
+     */
+    function ExceptionHandlerDecorator($delegate, $injector) {
+        return function(exception, cause) {
+            var errorService = $injector.get('errorService');
+
+            // show an alert
+            errorService.showError();
+
+            // run the delegate
+            $delegate(exception, cause);
+        };
+    }
+
+    /**
+     * @ngdoc Service
+     * @name GroupService
+     * @description Logic for fetching and storing groups
+     * @requires apiService
+     */
+    function GroupService(apiService) {
+        var self = this;
+        self.fetch = fetch;
+
+        var groups = [];
+
+        function fetch() {
+            return apiService.request('GET', 'groups')
+                .then(function(response) {
+                    return response.data;
+                });
+        }
+    }
+
+    /**
+     * @ngdoc Config
+     * @name HttpInterceptorConfig
+     * @description Configures interceptors for the $http service
+     * @requires $httpProvider
+     * @requires $q
+     */
+    function HttpInterceptorConfig($httpProvider) {
+        $httpProvider.interceptors.push(function($injector) {
+            return {
+                'responseError': function(request) {
+                    var $q = $injector.get('$q');
+                    var errorService = $injector.get('errorService');
+                    if (angular.isFunction(request.config.onError)) {
+                        // do custom error logic
+                        request.config.onError(request);
+                    } else {
+                        // show default error modal
+                        errorService.showError();
+                    }
+                    return $q.reject(request);
+                }
+            };
+        });
+    }
+
+    /**
+     * @ngdoc Service
+     * @name SignupService
+     * @description Logic for fetching and storing signups
+     * @requires apiService
+     */
+    function SignupService(apiService) {
+        var self = this;
+        self.fetch = fetch;
+        self.create = create;
+
+        var signups = [];
+
+        function create(signup, onError) {
+            return apiService.request('POST', 'signup', signup, { 'onError': onError });
+        }
+
+        function fetch() {
+            return apiService.request('GET', 'signups')
+                .then(function(response) {
+                    return response.data;
+                });
+        }
     }
 
     function TimeFilter($filter) {

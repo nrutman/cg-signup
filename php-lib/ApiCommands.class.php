@@ -50,7 +50,7 @@ class ApiCommands {
     }
 
     public function postSignupAction($data) {
-        $signups = $this->getSignupsForGroup($data['groupId']);
+        $signups = $this->getSignupsForGroup($data['group_id']);
         if (count($signups) >= self::MAX_SIGNUPS) {
             throw new GroupFullException();
         }

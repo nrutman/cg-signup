@@ -13,21 +13,21 @@
     layout-wrap>
     <div
         flex-gt-sm="33"
-        ng-class="signup.getGroupClasses(group)"
-        ng-repeat="group in signup.groups track by $index">
+        ng-class="app.getGroupClasses(group)"
+        ng-repeat="group in app.groups track by $index">
         <h2 layout="row" layout-align="space-between start">
             <span class="group-name" flex="auto" ng-bind="group.name"></span>
             <span
                 class="group-status"
                 flex="25"
-                title="{{signup.getGroupCountLanguage(group.members.length)}}"
+                title="{{app.getGroupCountLanguage(group.members.length)}}"
                 >
                 <span ng-bind="group.members.length"></span>
                 <md-icon>people</md-icon>
             </span>
         </h2>
         <div class="group-meta">
-            <span class="group-type" ng-bind="signup.getFormattedGroupType(group.type)"></span>
+            <span class="group-type" ng-bind="app.getFormattedGroupType(group.type)"></span>
             <span class="group-date-time">
                 <span class="group-day" ng-bind="group.day"></span>
                 at
@@ -40,7 +40,7 @@
                 <span class="group-member-is-leader" ng-if="member.is_leader">Leader</span>
             </li>
             <li
-                ng-repeat="i in signup.getGroupEmptyCount(group.name) track by $index"
+                ng-repeat="i in app.getGroupEmptyCount(group.name) track by $index"
                 class="empty">
                 &nbsp;
             </li>
@@ -48,15 +48,15 @@
         <div class="group-controls">
             <md-button
                 class="md-raised md-primary"
-                ng-click="signup.joinGroup(group.id)"
-                ng-if="!signup.isGroupFull(group)"
+                ng-click="app.joinGroup(group.id)"
+                ng-if="!app.isGroupFull(group)"
                 >
                 <md-icon>person_add</md-icon>
                 Join This Group
             </md-button>
             <md-button
                 ng-disabled="true"
-                ng-if="signup.isGroupFull(group)"
+                ng-if="app.isGroupFull(group)"
                 >
                 Sorry, but this group is full
             </md-button>
