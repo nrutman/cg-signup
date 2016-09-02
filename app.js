@@ -66,6 +66,7 @@
     function AppCtrl($mdDialog, $q, errorService, groupService, signupService, MAX_MEMBERS) {
         var self = this;
         self.getContainerClass = getContainerClass;
+        self.currentSignup = {};
         self.currentStep = 1;
         self.data = {};
         self.getFormattedGroupType = getFormattedGroupType;
@@ -163,14 +164,17 @@
                 email: self.data.email,
                 phone: self.data.phone
             };
-            signupService.create(newSignup, angular.noop).then(function() {
+            signupService.create(newSignup, angular.noop).then(function(response) {
+                currentSignup = response.data;
+                currentSignup.first_preference = Boolean(currentSignup.first_preference);
                 $mdDialog.show({
                     bindToController: true,
                     controller: 'ConfirmationModalCtrl as ctrl',
                     escapeToClose: false,
                     locals: {
                         groups: self.groups,
-                        selectedGroup: self.groups[groupMapById[groupId]]
+                        selectedGroup: self.groups[groupMapById[groupId]],
+                        signup: currentSignup
                     },
                     templateUrl: 'app/templates/modals/confirmationModal.tpl.html'
                 }).then(submitFeedback);
@@ -217,10 +221,8 @@
             }
         }
 
-        function submitFeedback() {
-            //
-            // TODO: Post the updated response
-            //
+        function submitFeedback(signup) {
+            signupService.update(signup);
             self.currentStep++;
         }
 
@@ -237,16 +239,12 @@
     function ConfirmationModalCtrl($mdDialog) {
         var self = this;
         self.complete = complete;
-        self.data = {
-            firstPreference: true,
-            preferenceNotes: '',
-            notes: ''
-        };
         self.groups = self.groups || [];
         self.selectedGroup = self.selectedGroup || {};
+        self.signup = self.signup || {};
 
         function complete() {
-            $mdDialog.hide();
+            $mdDialog.hide(self.signup);
         }
     }
 
@@ -354,6 +352,7 @@
         var self = this;
         self.fetch = fetch;
         self.create = create;
+        self.update = update;
 
         var signups = [];
 
@@ -366,6 +365,10 @@
                 .then(function(response) {
                     return response.data;
                 });
+        }
+
+        function update(signup) {
+            return apiService.request('PUT', 'signup', signup);
         }
     }
 

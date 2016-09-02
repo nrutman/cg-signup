@@ -23,6 +23,13 @@ LIMIT 1
 ;
 SQL;
 
+    const SELECT_SIGNUP_BY_ID = <<<'SQL'
+SELECT s.*
+FROM cg_signups s
+WHERE s.id = :id
+;
+SQL;
+
     const SELECT_SIGNUPS_FOR_GROUP_SQL = <<<'SQL'
 SELECT s.*, g.name as group_name
 FROM cg_signups s
@@ -37,6 +44,23 @@ SELECT s.*, g.name as group_name
 FROM cg_signups s
 JOIN cg_groups g ON s.group_id = g.id
 ORDER BY s.is_leader DESC, s.id ASC
+;
+SQL;
+
+    const UPDATE_SIGNUP_SQL = <<<'SQL'
+UPDATE cg_signups
+SET
+    group_id = :group_id,
+    first_name = :first_name,
+    last_name = :last_name,
+    email = :email,
+    phone = :phone,
+    is_leader = :is_leader,
+    first_preference = :first_preference,
+    preference_notes = :preference_notes,
+    notes = :notes,
+    created_at = :created_at
+WHERE id = :id
 ;
 SQL;
 

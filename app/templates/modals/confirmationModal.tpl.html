@@ -19,14 +19,14 @@
             </p>
 
             <div class="feedback-form">
-                <md-checkbox ng-model="ctrl.data.firstPreference">This was my first preference.</md-checkbox>
-                <md-input-container class="md-block" ng-hide="ctrl.data.firstPreference">
+                <md-checkbox ng-model="ctrl.signup.first_preference">This was my first preference.</md-checkbox>
+                <md-input-container class="md-block" ng-hide="ctrl.signup.first_preference">
                     <label>What group did you prefer and why?</label>
-                    <textarea ng-model="ctrl.data.preferenceNotes" rows="5" md-select-on-focus></textarea>
+                    <textarea ng-model="ctrl.signup.preference_notes" rows="5" md-select-on-focus></textarea>
                 </md-input-container>
                 <md-input-container class="md-block">
                     <label>Do you have any other feedback that you would like to give us?</label>
-                    <textarea ng-model="ctrl.data.notes" rows="5" md-select-on-focus></textarea>
+                    <textarea ng-model="ctrl.signup.notes" rows="5" md-select-on-focus></textarea>
                 </md-input-container>
             </div>
         </div>

@@ -17,17 +17,12 @@ class ApiCommands {
         return $statement->fetchAll();
     }
 
-    protected function insert($query, $values) {
+    protected function query($query, $values = array()) {
         $statement = $this->db->getConnection()->prepare($query);
-        $result = $statement->execute($values);
-        if (!result) {
-            throw new DbInsertFailedException();
-        }
-        return $result;
-    }
-
-    protected function query($query) {
-        return $this->db->getConnection()->query($query);
+        if (!$statement->execute($values)) {
+            throw new DbStatementFailedException();
+        };
+        return $statement;
     }
 
     protected function returnOne($value) {
@@ -49,6 +44,15 @@ class ApiCommands {
         return $this->query(ApiQueries::SELECT_SIGNUPS_SQL)->fetchAll();
     }
 
+    public function putSignupAction($data) {
+        if (!is_numeric($data['id'])) {
+            throw new ObjectNotValidException();
+        }
+
+        $this->query(ApiQueries::UPDATE_SIGNUP_SQL, $data);
+        return $this->returnOne($this->query(ApiQueries::SELECT_SIGNUP_BY_ID, array('id' => $data['id'])));
+    }
+
     public function postSignupAction($data) {
         $signups = $this->getSignupsForGroup($data['group_id']);
         if (count($signups) >= self::MAX_SIGNUPS) {
@@ -61,7 +65,7 @@ class ApiCommands {
             'email' => 1,
             'phone' => 1
         ));
-        $this->insert(ApiQueries::INSERT_SIGNUP_SQL, $signup);
+        $this->query(ApiQueries::INSERT_SIGNUP_SQL, $signup);
         return $this->returnOne($this->query(ApiQueries::SELECT_LAST_SIGNUP_SQL)->fetchAll());
     }
 

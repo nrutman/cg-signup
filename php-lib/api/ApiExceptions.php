@@ -50,8 +50,8 @@ abstract class CustomException extends Exception implements IException {
  * Custom Exception Classes
  */
 
-class DbInsertFailedException extends CustomException {
-    protected $message = 'The database insert failed.';
+class DbStatementFailedException extends CustomException {
+    protected $message = 'The database statement failed.';
     protected $code = 4;
 }
 
