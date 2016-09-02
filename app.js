@@ -191,7 +191,7 @@
     function SignupCtrl($mdDialog, $q, groupService, signupService, MAX_MEMBERS) {
         var self = this;
         self.getContainerClass = getContainerClass;
-        self.currentStep = 3;
+        self.currentStep = 1;
         self.data = {};
         self.getFormattedGroupType = getFormattedGroupType;
         self.getGroupClasses = getGroupClasses;
