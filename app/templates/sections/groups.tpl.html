@@ -37,6 +37,7 @@
         <ol class="group-members">
             <li ng-repeat="member in group.members">
                 <span class="group-member-name" ng-bind="member.full_name"></span>
+                <span class="group-member-is-leader" ng-if="member.is_leader">Leader</span>
             </li>
             <li
                 ng-repeat="i in signup.getGroupEmptyCount(group.name) track by $index"
@@ -48,9 +49,16 @@
             <md-button
                 class="md-raised md-primary"
                 ng-click="signup.joinGroup(group.id)"
+                ng-if="!signup.isGroupFull(group)"
                 >
                 <md-icon>person_add</md-icon>
                 Join This Group
+            </md-button>
+            <md-button
+                ng-disabled="true"
+                ng-if="signup.isGroupFull(group)"
+                >
+                Sorry, but this group is full
             </md-button>
         </div>
     </div>
