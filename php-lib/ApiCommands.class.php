@@ -5,6 +5,7 @@ require_once('ApiQueries.class.php');
 
 class ApiCommands {
     protected $db;
+    const MAX_SIGNUPS = 12;
 
     public function __construct() {
         $this->db = new ApiDbConnection();
@@ -18,7 +19,7 @@ class ApiCommands {
         $statement = $this->db->get_connection()->prepare($query);
         $result = $statement->execute($values);
         if (!result) {
-            throw new Exception('Insert failed.');
+            throw new DbInsertFailedException();
         }
         return $result;
     }
@@ -39,6 +40,10 @@ class ApiCommands {
     }
 
     public function post_signup($signup) {
+        $signups = $this->get_signups();
+        if (count($signups) >= self::MAX_SIGNUPS) {
+            throw new GroupFullException();
+        }
         $signup = array_intersect_key($signup, array(
             'group_id' => 1,
             'first_name' => 1,
