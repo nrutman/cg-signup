@@ -1,7 +1,7 @@
 <?php
 
-require_once('php-lib/ApiProcessor.class.php');
-require_once('php-lib/ApiExceptions.php');
+require_once('php-lib/api/ApiProcessor.class.php');
+require_once('php-lib/api/ApiExceptions.php');
 
 $api = new ApiProcessor;
 header('Content-Type: application/json');

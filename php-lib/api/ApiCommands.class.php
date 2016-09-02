@@ -1,14 +1,14 @@
 <?php
 
-require_once('ApiDbConnection.class.php');
 require_once('ApiQueries.class.php');
+require_once(__DIR__ . '/../db/DbConnection.class.php');
 
 class ApiCommands {
     protected $db;
     const MAX_SIGNUPS = 12;
 
     public function __construct() {
-        $this->db = new ApiDbConnection();
+        $this->db = new DbConnection();
     }
 
     protected function getSignupsForGroup($groupId) {

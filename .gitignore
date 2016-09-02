@@ -1,0 +1,2 @@
+php-lib/config/*
+!php-lib/config/*.sample.php

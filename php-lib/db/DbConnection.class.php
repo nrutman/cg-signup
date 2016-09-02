@@ -1,14 +1,16 @@
 <?php
 
-class ApiDbConnection {
+require_once(__DIR__ . '/../config/config.php');
+
+class DbConnection {
 
     protected $conn;
 
     public function __construct() {
-        $host = '127.0.0.1;port=8889';
-        $db = 'pcop';
-        $user = 'root';
-        $pass = 'root';
+        $host = Config::$configuration['db.host'];
+        $db = Config::$configuration['db.database'];
+        $user = Config::$configuration['db.user'];
+        $pass = Config::$configuration['db.password'];
         $charset = 'utf8';
 
         $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
