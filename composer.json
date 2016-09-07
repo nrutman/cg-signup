@@ -1,0 +1,13 @@
+{
+    "name": "provchurch/cg-signup",
+    "description": "A simple signup application for Community Groups at Providence Church",
+    "require": {
+        "phpmailer/phpmailer": "~5.2"
+    },
+    "authors": [
+        {
+            "name": "Nathan Rutman",
+            "email": "nathan.rutman@gmail.com"
+        }
+    ]
+}
