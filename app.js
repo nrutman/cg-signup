@@ -17,7 +17,7 @@
         .service('signupService', SignupService)
         // controllers
         .controller('AppCtrl', AppCtrl)
-        .controller('ConfirmationModalCtrl', ConfirmationModalCtrl)
+        .controller('FeedbackModalCtrl', FeedbackModalCtrl)
         // decorators
         .decorator('$exceptionHandler', ExceptionHandlerDecorator)
         // run block
@@ -164,31 +164,31 @@
                 email: self.data.email,
                 phone: self.data.phone
             };
-            signupService.create(newSignup, angular.noop).then(function(response) {
-                currentSignup = response.data;
-                currentSignup.first_preference = Boolean(currentSignup.first_preference);
-                $mdDialog.show({
-                    bindToController: true,
-                    controller: 'ConfirmationModalCtrl as ctrl',
-                    escapeToClose: false,
-                    locals: {
-                        groups: self.groups,
-                        selectedGroup: self.groups[groupMapById[groupId]],
-                        signup: currentSignup
-                    },
-                    templateUrl: 'app/templates/modals/confirmationModal.tpl.html'
-                }).then(submitFeedback);
-            }, function(response) {
-                if (response.data.code == 3) {
-                    // group is full
-                    errorService.showFullGroup();
-                    initialize();
-                    return;
-                }
+            return signupService.create(newSignup, angular.noop)
+                .then(function(response) {
+                    currentSignup = response.data;
+                    currentSignup.first_preference = Boolean(currentSignup.first_preference);
+                    return $mdDialog.show({
+                        bindToController: true,
+                        controller: 'FeedbackModalCtrl as ctrl',
+                        escapeToClose: false,
+                        locals: {
+                            selectedGroup: self.groups[groupMapById[groupId]],
+                            signup: currentSignup
+                        },
+                        templateUrl: 'app/templates/modals/feedbackModal.tpl.html'
+                    }).then(submitFeedback);
+                }, function(response) {
+                    if (response.data.code == 3) {
+                        // group is full
+                        errorService.showFullGroup();
+                        initialize();
+                        return;
+                    }
 
-                // default error handling
-                errorService.showError();
-            });
+                    // default error handling
+                    errorService.showError();
+                });
         }
 
         function previous() {
@@ -228,23 +228,6 @@
 
         function validateAboutForm() {
             return self.aboutForm.$invalid;
-        }
-    }
-
-    /**
-     * @ngdoc Controller
-     * @name ConfirmationModalCtrl
-     * @description Controller for the group selection confirmation modal
-     */
-    function ConfirmationModalCtrl($mdDialog) {
-        var self = this;
-        self.complete = complete;
-        self.groups = self.groups || [];
-        self.selectedGroup = self.selectedGroup || {};
-        self.signup = self.signup || {};
-
-        function complete() {
-            $mdDialog.hide(self.signup);
         }
     }
 
@@ -294,6 +277,22 @@
             // run the delegate
             $delegate(exception, cause);
         };
+    }
+
+    /**
+     * @ngdoc Controller
+     * @name FeedbackModalCtrl
+     * @description Controller for the group selection confirmation modal
+     */
+    function FeedbackModalCtrl($mdDialog) {
+        var self = this;
+        self.complete = complete;
+        self.selectedGroup = self.selectedGroup || {};
+        self.signup = self.signup || {};
+
+        function complete() {
+            $mdDialog.hide(self.signup);
+        }
     }
 
     /**

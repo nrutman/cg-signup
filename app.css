@@ -175,19 +175,19 @@ section form button[type=submit] {
     color: rgba(0,0,0,0.38);
 }
 
-.confirmation-modal h1 {
+.feedback-modal h1 {
     font-size: 1.5em;
     font-weight: normal;
 }
 
-.confirmation-modal h1 strong {
+.feedback-modal h1 strong {
     color: #1976D2;
     display: inline-block;
     font-weight: bold;
     white-space: nowrap;
 }
 
-.confirmation-modal .feedback-form {
+.feedback-modal .feedback-form {
     margin-top: 3em;
 }
 
@@ -210,7 +210,7 @@ section form button[type=submit] {
         border-right: none;
     }
 
-    .confirmation-modal {
+    .feedback-modal {
         max-width: 50em;
     }
 }
