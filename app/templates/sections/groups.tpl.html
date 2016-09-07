@@ -48,7 +48,7 @@
         <div class="group-controls">
             <md-button
                 class="md-raised md-primary"
-                ng-click="app.joinGroup(group.id)"
+                ng-click="app.joinGroup(group.id, $event)"
                 ng-if="!app.isGroupFull(group)"
                 >
                 <md-icon>person_add</md-icon>

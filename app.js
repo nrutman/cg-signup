@@ -156,39 +156,59 @@
             return (group.members.length >= MAX_MEMBERS);
         }
 
-        function joinGroup(groupId) {
-            var newSignup = {
-                group_id: groupId,
-                first_name: self.data.firstName,
-                last_name: self.data.lastName,
-                email: self.data.email,
-                phone: self.data.phone
-            };
-            return signupService.create(newSignup, angular.noop)
-                .then(function(response) {
-                    currentSignup = response.data;
-                    currentSignup.first_preference = Boolean(currentSignup.first_preference);
-                    return $mdDialog.show({
-                        bindToController: true,
-                        controller: 'FeedbackModalCtrl as ctrl',
-                        escapeToClose: false,
-                        locals: {
-                            selectedGroup: self.groups[groupMapById[groupId]],
-                            signup: currentSignup
-                        },
-                        templateUrl: 'app/templates/modals/feedbackModal.tpl.html'
-                    }).then(submitFeedback);
-                }, function(response) {
-                    if (response.data.code == 3) {
-                        // group is full
-                        errorService.showFullGroup();
-                        initialize();
-                        return;
-                    }
+        function joinGroup(groupId, evt) {
+            var selectedGroup = self.groups[groupMapById[groupId]];
 
-                    // default error handling
-                    errorService.showError();
-                });
+            return $mdDialog.show(
+                // show the confirmation modal
+                $mdDialog.confirm()
+                    .title('Would you like to join ' + selectedGroup.name + '?')
+                    .textContent('To change your group you will need to contact the church office.')
+                    .ok('Join Group')
+                    .cancel('Cancel')
+                    .targetEvent(evt)
+            ).then(function() {
+                // post the signup
+                var newSignup = {
+                    group_id: groupId,
+                    first_name: self.data.firstName,
+                    last_name: self.data.lastName,
+                    email: self.data.email,
+                    phone: self.data.phone
+                };
+                return signupService.create(newSignup, angular.noop);
+            }, function() {
+                return $q.reject(null);
+            }).then(function(response) {
+                // show the feedback modal
+                currentSignup = response.data;
+                currentSignup.first_preference = Boolean(currentSignup.first_preference);
+                return $mdDialog.show({
+                    bindToController: true,
+                    controller: 'FeedbackModalCtrl as ctrl',
+                    escapeToClose: false,
+                    locals: {
+                        selectedGroup: self.groups[groupMapById[groupId]],
+                        signup: currentSignup
+                    },
+                    templateUrl: 'app/templates/modals/feedbackModal.tpl.html'
+                }).then(submitFeedback);
+            }, function(response) {
+                // error handling
+                if (response === null) {
+                    return $q.reject(null);
+                }
+
+                if (response.data.code == 3) {
+                    // group is full
+                    errorService.showFullGroup();
+                    initialize();
+                    return;
+                }
+
+                // default error handling
+                errorService.showError();
+            });
         }
 
         function previous() {
@@ -282,7 +302,8 @@
     /**
      * @ngdoc Controller
      * @name FeedbackModalCtrl
-     * @description Controller for the group selection confirmation modal
+     * @description Controller for the group selection feedback modal
+     * @requires $mdDialog
      */
     function FeedbackModalCtrl($mdDialog) {
         var self = this;
