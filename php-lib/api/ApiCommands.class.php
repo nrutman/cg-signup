@@ -1,5 +1,6 @@
 <?php
 
+require_once('ApiMailer.class.php');
 require_once('ApiQueries.class.php');
 require_once(__DIR__ . '/../db/DbConnection.class.php');
 
@@ -10,6 +11,10 @@ class ApiCommands {
     public function __construct() {
         $this->db = new DbConnection();
     }
+
+    /**
+     * Helper Methods
+     */
 
     protected function getSignupsForGroup($groupId) {
         $statement = $this->db->getConnection()->prepare(ApiQueries::SELECT_SIGNUPS_FOR_GROUP_SQL);
@@ -50,14 +55,17 @@ class ApiCommands {
         }
 
         $this->query(ApiQueries::UPDATE_SIGNUP_SQL, $data);
-        return $this->returnOne($this->query(ApiQueries::SELECT_SIGNUP_BY_ID, array('id' => $data['id'])));
+        return $this->returnOne($this->query(ApiQueries::SELECT_SIGNUP_BY_ID, array('id' => $data['id']))->fetchAll());
     }
 
     public function postSignupAction($data) {
+        // make sure the group isn't full
         $signups = $this->getSignupsForGroup($data['group_id']);
         if (count($signups) >= self::MAX_SIGNUPS) {
             throw new GroupFullException();
         }
+
+        // whitelist data
         $signup = array_intersect_key($data, array(
             'group_id' => 1,
             'first_name' => 1,
@@ -65,8 +73,18 @@ class ApiCommands {
             'email' => 1,
             'phone' => 1
         ));
+
+        // insert data and get the row inserted
         $this->query(ApiQueries::INSERT_SIGNUP_SQL, $signup);
-        return $this->returnOne($this->query(ApiQueries::SELECT_LAST_SIGNUP_SQL)->fetchAll());
+        $insertedRow = $this->returnOne($this->query(ApiQueries::SELECT_LAST_SIGNUP_SQL)->fetchAll());
+
+        // send the confirmation email
+        $signupAndGroup = $this->returnOne($this->query(ApiQueries::SELECT_SIGNUP_FOR_GROUP_BY_SIGNUP_ID, array( 'signup_id' => (int) $insertedRow['id'] ))->fetchAll());
+        $mailer = new ApiMailer();
+        $mailer->sendConfirmation($signupAndGroup);
+
+        // return the row that was inserted
+        return $insertedRow;
     }
 
 }

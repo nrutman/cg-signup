@@ -1,0 +1,60 @@
+<!--
+    The following file should be run through a preprocessor to compile all
+    styles to inline markup.
+
+    See http://premailer.dialect.ca/ for one option.
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>You joined the {{name}} Community Group</title>
+        <style type="text/css">
+        body {margin: 0; padding: 0; min-width: 100%!important; font-family: sans-serif;}
+        .content {width: 100%; max-width: 600px;}
+        h1 {color: #1976D2; font-size: 26px; font-weight: normal;}
+        p {margin: 40px 0;}
+        img.logo {display: block; max-width: 250px; margin: 60px auto;}
+        </style>
+    </head>
+    <body yahoo bgcolor="#ffffff">
+        <table width="100%" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td>
+                    <table class="content" align="center" cellpadding="20" cellspacing="0" border="0">
+                        <tr>
+                            <td>
+                                <h1>Thank you for joining the <strong>{{name}}</strong> Community Group!</h1>
+                                <p><strong>Here are the details for your group:</strong></p>
+
+                                <table border="0" cellpadding="5" cellspacing="0">
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>{{name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Group Type</td>
+                                        <td>{{type}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Meets On</td>
+                                        <td>{{day}}s at {{time}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Meeting Location</td>
+                                        <td>{{address}}</td>
+                                    </tr>
+                                </table>
+
+                                <p><strong>Please note</strong> that any changes to groups must be made by contacting the church office at <a href="mailto:office@provchurch.org">office@provchurch.org</a> or by calling 412-942-1000.</p>
+
+                                <img class="logo" src="http://provchurch.org/wp-content/themes/prov-church/img/provchurch-email-logo.png">
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

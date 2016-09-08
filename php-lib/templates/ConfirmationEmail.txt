@@ -1,0 +1,17 @@
+Thank you for joining the {{name}} Community Group!
+
+Here are the details for your group:
+
+Name
+{{name}}
+
+Group Type
+{{type}}
+
+Meets On
+{{day}}s at {{time_formatted}}
+
+Meeting Location
+{{address}}
+
+Please note that any changes to groups must be made by contacting the church office at office@provchurch.org ( mailto:office@provchurch.org ) or by calling 412-942-1000.

@@ -30,6 +30,14 @@ WHERE s.id = :id
 ;
 SQL;
 
+    const SELECT_SIGNUP_FOR_GROUP_BY_SIGNUP_ID = <<<'SQL'
+SELECT s.*, g.*
+FROM cg_signups s
+JOIN cg_groups g ON s.group_id = g.id
+WHERE s.id = :signup_id
+;
+SQL;
+
     const SELECT_SIGNUPS_FOR_GROUP_SQL = <<<'SQL'
 SELECT s.*, g.name as group_name
 FROM cg_signups s
