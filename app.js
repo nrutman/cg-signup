@@ -67,12 +67,13 @@
         var self = this;
         self.getContainerClass = getContainerClass;
         self.currentSignup = {};
-        self.currentStep = 1;
+        self.currentStep = 3;
         self.data = {};
         self.getFormattedGroupType = getFormattedGroupType;
         self.getGroupClasses = getGroupClasses;
         self.getGroupCountLanguage = getGroupCountLanguage;
         self.getGroupEmptyCount = getGroupEmptyCount;
+        self.getGroupToolTip = getGroupToolTip;
         self.groups = [];
         self.isGroupFull = isGroupFull;
         self.joinGroup = joinGroup;
@@ -150,6 +151,25 @@
             if (group === null || group.members.length >= MAX_MEMBERS) return new Array(0);
 
             return new Array(MAX_MEMBERS - group.members.length);
+        }
+
+        function getGroupToolTip(type) {
+            var groupDescriptions = {
+                'Daytime': 'A group that meets during the day for people with alternate schedules.',
+                'Families with Adult Children': 'A group made up of parents who have at least one child 18 or older.',
+                'Mens': 'A group of men who come together to sharpen one another and grow together.',
+                'Mixed': 'A group made up of both men and women of various ages and seasons of life.',
+                'Young Families': 'A group made up of parents with young children.',
+                'Womens': 'A group of women who seek to grow together and encourage one another.'
+            };
+            console.log(type);
+            var tooltip = groupDescriptions[type];
+
+            if (!tooltip) {
+                return 'This is a mock description of a group type.';
+            }
+
+            return tooltip;
         }
 
         function isGroupFull(group) {

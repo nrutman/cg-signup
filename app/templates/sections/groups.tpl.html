@@ -27,7 +27,10 @@
             </span>
         </h2>
         <div class="group-meta">
-            <span class="group-type" ng-bind="app.getFormattedGroupType(group.type)"></span>
+            <span class="group-type">
+                <span ng-bind="app.getFormattedGroupType(group.type)"></span>
+                <span class="tooltip" ng-bind="app.getGroupToolTip(group.type)"></span>
+            </span>
             <span class="group-date-time">
                 <span class="group-day" ng-bind="group.day"></span>
                 at

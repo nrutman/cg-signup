@@ -130,7 +130,34 @@ section form button[type=submit] {
 
 .group-type {
     color: #1976D2;
+    cursor: help;
+    display: inline-block;
     margin-right: 1em;
+    position: relative;
+}
+
+.group-type .tooltip {
+    background-color: #1976D2;
+    border-radius: 0.5em;
+    color: white;
+    cursor: auto;
+    display: none;
+    left: -0.5em;
+    font-size: 0.9em;
+    padding: 0.3em 1em;
+    position: absolute;
+    text-transform: none;
+    top: 110%;
+    white-space: normal;
+    width: 250px;
+}
+
+.group-type:hover .tooltip {
+    display: block;
+}
+
+.group-full .group-type .tooltip {
+    background-color: #777;
 }
 
 .group-day::after {
