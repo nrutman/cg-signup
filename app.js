@@ -162,7 +162,6 @@
                 'Young Families': 'A group made up of parents with young children.',
                 'Womens': 'A group of women who seek to grow together and encourage one another.'
             };
-            console.log(type);
             var tooltip = groupDescriptions[type];
 
             if (!tooltip) {
