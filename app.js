@@ -42,7 +42,7 @@
         function request(method, object, data, additionalConfig) {
             var config = angular.extend({
                 method: method,
-                url: '/api.php?object=' + object
+                url: 'api.php?object=' + object
             }, additionalConfig);
 
             if (data) {
