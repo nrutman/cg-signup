@@ -8,7 +8,7 @@ header('Content-Type: application/json');
 try {
     // read data
     $data = json_decode(file_get_contents('php://input'));
-    if (get_class($data) == 'stdClass') {
+    if (is_object($data)) {
         $data = get_object_vars($data);
     }
 
