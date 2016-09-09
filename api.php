@@ -22,7 +22,7 @@ try {
     else if (empty($response) || !$response) {
         echo json_encode(new stdClass());
     } else {
-        echo json_encode($response);
+        echo json_encode($response, JSON_NUMERIC_CHECK);
     }
 } catch(Exception $e) {
     header("HTTP/1.1 400 Bad Request");
