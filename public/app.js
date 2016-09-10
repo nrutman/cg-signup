@@ -59,11 +59,12 @@
      * @description Controller for the main sign-up page
      * @requires $mdDialog
      * @requires $q
+     * @requires $timeout
      * @requires errorService
      * @requires groupService
      * @requires signupService
      */
-    function AppCtrl($mdDialog, $q, errorService, groupService, signupService, MAX_MEMBERS) {
+    function AppCtrl($mdDialog, $q, $timeout, errorService, groupService, signupService, MAX_MEMBERS) {
         var self = this;
         self.getContainerClass = getContainerClass;
         self.currentSignup = {};
@@ -86,23 +87,31 @@
         var validationMethods = [angular.noop, validateAboutForm, angular.noop];
         var groupMapByName;
         var groupMapById;
+        var refreshTimer;
 
         initialize();
+        refreshGroupData(1000 * 60 * 5); // refresh the groups every 5 minutes
 
         function initialize() {
-            // reset collections
-            self.groups = [];
-            groupMapById = {};
-            groupMapByName = {};
-
             // query for data
             $q.all({
                 groups: groupService.fetch(),
                 signups: signupService.fetch()
             })
-                .then(function(results) {
-                    processGroups(results.groups, results.signups);
-                });
+            .then(function(results) {
+                // reset collections
+                self.groups = [];
+                groupMapById = {};
+                groupMapByName = {};
+
+                // process the groups
+                processGroups(results.groups, results.signups);
+            });
+        }
+
+        function cancelRefreshTimer() {
+            console.log('refresh timer cancelled');
+            $timeout.cancel(refreshTimer);
         }
 
         function getContainerClass() {
@@ -209,6 +218,9 @@
             }, function() {
                 return $q.reject(null);
             }).then(function(response) {
+                // refresh the group data
+                refreshGroupData();
+
                 // show the feedback modal
                 currentSignup = response.data;
                 currentSignup.first_preference = Boolean(currentSignup.first_preference);
@@ -268,11 +280,31 @@
             if (!validationMethods[self.currentStep - 1]()) {
                 self.currentStep = Math.min(self.currentStep + 1, self.totalSteps);
             }
+
+            console.log('currentStep', self.currentStep);
+            console.log('totalSteps', self.totalSteps);
+            if (self.currentStep == self.totalSteps) {
+                cancelRefreshTimer();
+            }
+        }
+
+        function refreshGroupData(interval) {
+            interval = (angular.isNumber(interval) && interval > 0) ? interval : 0;
+
+            refreshTimer = $timeout(function() {
+                // refresh the group data
+                initialize();
+
+                // set the next interval
+                if (interval > 0) {
+                    refreshGroupData(interval);
+                }
+            }, interval);
         }
 
         function submitFeedback(signup) {
             signupService.update(signup);
-            self.currentStep++;
+            self.next();
         }
 
         function validateAboutForm() {
