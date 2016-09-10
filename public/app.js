@@ -60,11 +60,12 @@
      * @requires $mdDialog
      * @requires $q
      * @requires $timeout
+     * @requires $window
      * @requires errorService
      * @requires groupService
      * @requires signupService
      */
-    function AppCtrl($mdDialog, $q, $timeout, errorService, groupService, signupService, MAX_MEMBERS) {
+    function AppCtrl($mdDialog, $q, $timeout, $window, errorService, groupService, signupService, MAX_MEMBERS) {
         var self = this;
         self.getContainerClass = getContainerClass;
         self.currentSignup = {};
@@ -81,6 +82,7 @@
         self.isPreviousButtonDisabled = isPreviousButtonDisabled;
         self.joinGroup = joinGroup;
         self.next = next;
+        self.openMap = openMap;
         self.previous = previous;
         self.totalSteps = 4;
 
@@ -250,6 +252,10 @@
                 // default error handling
                 errorService.showError();
             });
+        }
+
+        function openMap() {
+            $window.open('https://drive.google.com/open?id=1h_zzQK-t2RCnXRpnTqfAj0RQIxw');
         }
 
         function previous() {
