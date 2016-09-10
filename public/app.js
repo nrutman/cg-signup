@@ -112,7 +112,6 @@
         }
 
         function cancelRefreshTimer() {
-            console.log('refresh timer cancelled');
             $timeout.cancel(refreshTimer);
         }
 
@@ -287,8 +286,6 @@
                 self.currentStep = Math.min(self.currentStep + 1, self.totalSteps);
             }
 
-            console.log('currentStep', self.currentStep);
-            console.log('totalSteps', self.totalSteps);
             if (self.currentStep == self.totalSteps) {
                 cancelRefreshTimer();
             }
