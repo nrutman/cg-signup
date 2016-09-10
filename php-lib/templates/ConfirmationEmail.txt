@@ -11,7 +11,7 @@ Group Type
 Meets On
 {{day}}s at {{time_formatted}}
 
-Meeting Location
+Location
 {{address}}
 
 Please note that any changes to groups must be made by contacting the church office at office@provchurch.org ( mailto:office@provchurch.org ) or by calling 412-942-1000.

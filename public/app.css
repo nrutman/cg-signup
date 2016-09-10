@@ -71,7 +71,7 @@ md-toolbar h2 md-icon.material-icons {
     width: 1em;
 }
 
-.intro-logo {
+.provchurch-logo {
     display: block;
     margin: 3em auto 1em;
     max-width: 100%;
@@ -218,6 +218,18 @@ md-toolbar h2 md-icon.material-icons {
 
 .feedback-modal .feedback-form {
     margin-top: 3em;
+}
+
+.thanks-table {
+    margin: 1em auto;
+}
+
+.thanks-table th {
+    font-size: 0.8em;
+    font-weight: bold;
+    padding-right: 1em;
+    text-align: right;
+    text-transform: uppercase;
 }
 
 @media (min-width: 960px) {

@@ -9,4 +9,40 @@
 </md-toolbar>
 
 <section>
+    <h3>Thank you for joining the <strong ng-bind="app.currentGroup.name"></strong> Community Group!</h3>
+    <p>You will receive an email confirmation of the following details:</p>
+
+    <table class="thanks-table">
+        <tr>
+            <th>Name</th>
+            <td ng-bind="app.currentGroup.name"></td>
+        </tr>
+        <tr>
+            <th>Group Type</th>
+            <td ng-bind="app.currentGroup.type"></td>
+        </tr>
+        <tr>
+            <th>Meets On</th>
+            <td>
+                <span ng-bind="app.currentGroup.day"></span>s at
+                <span ng-bind="app.currentGroup.time | time"></span>
+            </td>
+        </tr>
+        <tr>
+            <th>Location</th>
+            <td>
+                <a
+                    ng-href="https://www.google.com/maps?q={{app.currentGroup.address}}"
+                    ng-bind="app.currentGroup.address"
+                    target="_blank"
+                    >
+                </a>
+            </td>
+        </tr>
+    </table>
+
+    <p><strong>Please note</strong> that any changes to groups must be made by contacting the church office at <a href="mailto:office@provchurch.org">office@provchurch.org</a> or by calling 412-942-1000.</p>
+
+    <img src="assets/provchurch-logo.png" class="provchurch-logo" alt="Providence Church">
+
 </section>

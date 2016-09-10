@@ -68,6 +68,7 @@
     function AppCtrl($mdDialog, $q, $timeout, $window, errorService, groupService, signupService, MAX_MEMBERS) {
         var self = this;
         self.getContainerClass = getContainerClass;
+        self.currentGroup = {};
         self.currentSignup = {};
         self.currentStep = 1;
         self.data = {};
@@ -92,7 +93,7 @@
         var refreshTimer;
 
         initialize();
-        refreshGroupData(1000 * 60 * 5); // refresh the groups every 5 minutes
+        refreshGroupData(1000 * 60 * 5); // 5 minutes
 
         function initialize() {
             // query for data
@@ -222,16 +223,18 @@
                 // refresh the group data
                 refreshGroupData();
 
+                self.currentSignup = response.data;
+                self.currentGroup = self.groups[groupMapById[self.currentSignup.group_id]];
+
                 // show the feedback modal
-                currentSignup = response.data;
-                currentSignup.first_preference = Boolean(currentSignup.first_preference);
+                self.currentSignup.first_preference = Boolean(self.currentSignup.first_preference);
                 return $mdDialog.show({
                     bindToController: true,
                     controller: 'FeedbackModalCtrl as ctrl',
                     escapeToClose: false,
                     locals: {
                         selectedGroup: self.groups[groupMapById[groupId]],
-                        signup: currentSignup
+                        signup: self.currentSignup
                     },
                     templateUrl: 'app/templates/modals/feedbackModal.tpl.html'
                 }).then(submitFeedback);
@@ -306,8 +309,10 @@
         }
 
         function submitFeedback(signup) {
-            signupService.update(signup);
-            self.next();
+            return signupService.update(signup)
+            .then(function(response) {
+                self.currentSignup = response.data;
+            }).then(self.next);
         }
 
         function validateAboutForm() {
@@ -458,6 +463,9 @@
 
     function TimeFilter($filter) {
         return function(input) {
+            if (!input) {
+                return '';
+            }
             var pieces = input.split(':');
             var pieceTypes = ['Hours', 'Minutes', 'Seconds', 'Milliseconds'];
             var dateTime = new Date();
