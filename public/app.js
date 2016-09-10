@@ -76,6 +76,8 @@
         self.getGroupToolTip = getGroupToolTip;
         self.groups = [];
         self.isGroupFull = isGroupFull;
+        self.isNextButtonDisabled = isNextButtonDisabled;
+        self.isPreviousButtonDisabled = isPreviousButtonDisabled;
         self.joinGroup = joinGroup;
         self.next = next;
         self.previous = previous;
@@ -173,6 +175,14 @@
 
         function isGroupFull(group) {
             return (group.members.length >= MAX_MEMBERS);
+        }
+
+        function isNextButtonDisabled() {
+            return self.currentStep >= self.totalSteps - 1;
+        }
+
+        function isPreviousButtonDisabled() {
+            return self.currentStep <= 1 || self.currentStep >= self.totalSteps;
         }
 
         function joinGroup(groupId, evt) {

@@ -59,7 +59,7 @@
             layout-align="space-around center">
             <md-button
                 ng-click="app.previous()"
-                ng-disabled="app.currentStep <= 1 || app.currentStep >= app.totalSteps"
+                ng-disabled="app.isPreviousButtonDisabled()"
                 title="Previous Step">
                 <md-icon>keyboard_arrow_left</md-icon>
                 Previous
@@ -71,7 +71,7 @@
             </span>
             <md-button
                 ng-click="app.next()"
-                ng-disabled="app.currentStep >= app.totalSteps - 1"
+                ng-disabled="app.isNextButtonDisabled()"
                 title="Next Step">
                 Next
                 <md-icon>keyboard_arrow_right</md-icon>
