@@ -1,68 +1,75 @@
-<h1 class=".md-title">
-    <md-icon>find_in_page</md-icon>
-    Find a Group
-</h1>
-
-<div
-    class="groups"
-    layout="row"
-    layout-sm="column"
-    layout-xs="column"
-    layout-align="space-between start"
-    layout-padding
-    layout-wrap>
-    <div
-        flex-gt-sm="33"
-        ng-class="app.getGroupClasses(group)"
-        ng-repeat="group in app.groups track by $index">
-        <h2 layout="row" layout-align="space-between start">
-            <span class="group-name" flex="auto" ng-bind="group.name"></span>
-            <span
-                class="group-status"
-                flex="25"
-                title="{{app.getGroupCountLanguage(group.members.length)}}"
-                >
-                <span ng-bind="group.members.length"></span>
-                <md-icon>people</md-icon>
-            </span>
+<md-toolbar>
+    <div class="md-toolbar-tools">
+        <h2 class="md-title">
+            <md-icon>find_in_page</md-icon>
+            Find a Group
         </h2>
-        <div class="group-meta">
-            <span class="group-type">
-                <span ng-bind="app.getFormattedGroupType(group.type)"></span>
-                <span class="tooltip" ng-bind="app.getGroupToolTip(group.type)"></span>
-            </span>
-            <span class="group-date-time">
-                <span class="group-day" ng-bind="group.day"></span>
-                at
-                <span class="group-time" ng-bind="group.time | time"></span>
-            </span>
-        </div>
-        <ol class="group-members">
-            <li ng-repeat="member in group.members">
-                <span class="group-member-name" ng-bind="member.full_name"></span>
-                <span class="group-member-is-leader" ng-if="member.is_leader">Leader</span>
-            </li>
-            <li
-                ng-repeat="i in app.getGroupEmptyCount(group.name) track by $index"
-                class="empty">
-                &nbsp;
-            </li>
-        </ol>
-        <div class="group-controls">
-            <md-button
-                class="md-raised md-primary"
-                ng-click="app.joinGroup(group.id, $event)"
-                ng-if="!app.isGroupFull(group)"
-                >
-                <md-icon>person_add</md-icon>
-                Join This Group
-            </md-button>
-            <md-button
-                ng-disabled="true"
-                ng-if="app.isGroupFull(group)"
-                >
-                Sorry, but this group is full
-            </md-button>
+        <span flex></span>
+    </div>
+</md-toolbar>
+
+<section>
+    <div
+        class="groups"
+        layout="row"
+        layout-sm="column"
+        layout-xs="column"
+        layout-align="space-between start"
+        layout-padding
+        layout-wrap>
+        <div
+            flex-gt-sm="33"
+            ng-class="app.getGroupClasses(group)"
+            ng-repeat="group in app.groups track by $index">
+            <h2 layout="row" layout-align="space-between start">
+                <span class="group-name" flex="auto" ng-bind="group.name"></span>
+                <span
+                    class="group-status"
+                    flex="25"
+                    title="{{app.getGroupCountLanguage(group.members.length)}}"
+                    >
+                    <span ng-bind="group.members.length"></span>
+                    <md-icon>people</md-icon>
+                </span>
+            </h2>
+            <div class="group-meta">
+                <span class="group-type">
+                    <span ng-bind="app.getFormattedGroupType(group.type)"></span>
+                    <span class="tooltip" ng-bind="app.getGroupToolTip(group.type)"></span>
+                </span>
+                <span class="group-date-time">
+                    <span class="group-day" ng-bind="group.day"></span>
+                    at
+                    <span class="group-time" ng-bind="group.time | time"></span>
+                </span>
+            </div>
+            <ol class="group-members">
+                <li ng-repeat="member in group.members">
+                    <span class="group-member-name" ng-bind="member.full_name"></span>
+                    <span class="group-member-is-leader" ng-if="member.is_leader">Leader</span>
+                </li>
+                <li
+                    ng-repeat="i in app.getGroupEmptyCount(group.name) track by $index"
+                    class="empty">
+                    &nbsp;
+                </li>
+            </ol>
+            <div class="group-controls">
+                <md-button
+                    class="md-raised md-primary"
+                    ng-click="app.joinGroup(group.id, $event)"
+                    ng-if="!app.isGroupFull(group)"
+                    >
+                    <md-icon>person_add</md-icon>
+                    Join This Group
+                </md-button>
+                <md-button
+                    ng-disabled="true"
+                    ng-if="app.isGroupFull(group)"
+                    >
+                    Sorry, but this group is full
+                </md-button>
+            </div>
         </div>
     </div>
-</div>
+</section>

@@ -29,29 +29,29 @@
         </header>
 
         <!-- INTRODUCTION -->
-        <section
+        <div
             ng-show="app.currentStep == 1"
             ng-include="'app/templates/sections/introduction.tpl.html'">
-        </section>
+        </div>
 
         <!-- ABOUT YOU -->
-        <section
+        <div
             ng-show="app.currentStep == 2"
             ng-include="'app/templates/sections/about.tpl.html'">
-        </section>
+        </div>
 
         <!-- FIND A GROUP-->
-        <section
+        <div
             ng-show="app.currentStep == 3"
             ng-include="'app/templates/sections/groups.tpl.html'"
             layout="column">
-        </section>
+        </div>
 
         <!-- THANKS -->
-        <section
+        <div
             ng-show="app.currentStep == 4"
             ng-include="'app/templates/sections/thanks.tpl.html'">
-        </section>
+        </div>
 
         <footer
             class="progress md-primary"
@@ -71,7 +71,7 @@
             </span>
             <md-button
                 ng-click="app.next()"
-                ng-disabled="app.currentStep >= app.totalSteps"
+                ng-disabled="app.currentStep >= app.totalSteps - 1"
                 title="Next Step">
                 Next
                 <md-icon>keyboard_arrow_right</md-icon>

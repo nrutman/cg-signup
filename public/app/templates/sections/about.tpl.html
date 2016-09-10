@@ -1,53 +1,60 @@
-<h1 class=".md-title">
-    <md-icon>account_circle</md-icon>
-    About You
-</h1>
+<md-toolbar>
+    <div class="md-toolbar-tools">
+        <h2 class="md-title">
+            <md-icon>account_circle</md-icon>
+            About You
+        </h2>
+        <span flex></span>
+    </div>
+</md-toolbar>
 
-<p>Before selecting a group, please tell us who you are&hellip;</p>
+<section>
+    <p>Before selecting a group, please tell us who you are&hellip;</p>
 
-<form
-    layout-gt-sm="row"
-    layout-align="space-around center"
-    layout-wrap
-    name="app.aboutForm"
-    ng-submit="app.next()">
+    <form
+        layout-gt-sm="row"
+        layout-align="space-around center"
+        layout-wrap
+        name="app.aboutForm"
+        ng-submit="app.next()">
 
-    <md-input-container flex="45">
-        <label>First Name</label>
-        <input
-            name="firstName"
-            ng-model="app.data.firstName"
-            required>
-    </md-input-container>
+        <md-input-container flex="45">
+            <label>First Name</label>
+            <input
+                name="firstName"
+                ng-model="app.data.firstName"
+                required>
+        </md-input-container>
 
-    <md-input-container flex="45">
-        <label>Last Name</label>
-        <input
-            name="lastName"
-            ng-model="app.data.lastName"
-            required>
-    </md-input-container>
+        <md-input-container flex="45">
+            <label>Last Name</label>
+            <input
+                name="lastName"
+                ng-model="app.data.lastName"
+                required>
+        </md-input-container>
 
-    <md-input-container flex="45">
-        <label>Phone Number</label>
-        <input
-            name="phone"
-            ng-model="app.data.phone"
-            placeholder=""
-            required
-            ui-mask="(999) 999-9999"
-            ui-mask-placeholder
-            ui-mask-placeholder-char="space">
-    </md-input-container>
+        <md-input-container flex="45">
+            <label>Phone Number</label>
+            <input
+                name="phone"
+                ng-model="app.data.phone"
+                placeholder=""
+                required
+                ui-mask="(999) 999-9999"
+                ui-mask-placeholder
+                ui-mask-placeholder-char="space">
+        </md-input-container>
 
-    <md-input-container flex="45">
-        <label>Email Address</label>
-        <input
-            ng-model="app.data.email"
-            required
-            type="email">
-    </md-input-container>
+        <md-input-container flex="45">
+            <label>Email Address</label>
+            <input
+                ng-model="app.data.email"
+                required
+                type="email">
+        </md-input-container>
 
-    <md-button type="submit">Submit</md-button>
+        <md-button type="submit">Submit</md-button>
 
-</form>
+    </form>
+</section>

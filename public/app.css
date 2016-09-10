@@ -54,19 +54,21 @@ body::before, body::after {
 }
 
 section {
-    padding: 1em;
-}
-
-section h1 md-icon.material-icons {
-    color: #1976D2;
-    font-size: 2em;
-    height: 1em;
-    opacity: 0.5;
-    width: 1em;
+    padding: 0.5em 1em 1em;
 }
 
 section form button[type=submit] {
     display: none;
+}
+
+.md-toolbar-tools h2 {
+    font-size: 1.2em;
+}
+
+md-toolbar h2 md-icon.material-icons {
+    font-size: 1.2em;
+    height: 1em;
+    width: 1em;
 }
 
 .intro-logo {
