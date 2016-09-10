@@ -23,12 +23,6 @@
         // run block
         .run(AppRun);
 
-    function MdThemeConfig($mdThemingProvider) {
-        $mdThemingProvider.theme('default')
-            .primaryPalette('blue')
-            .accentPalette('orange');
-    }
-
     /**
      * @ngdoc Service
      * @name ApiService
@@ -429,6 +423,18 @@
                 }
             };
         });
+    }
+
+    /**
+     * @ngdoc Config
+     * @name MdThemeConfig
+     * @description Configure material design theme
+     * @requires $mdThemingProvider
+     */
+    function MdThemeConfig($mdThemingProvider) {
+        $mdThemingProvider.theme('default')
+            .primaryPalette('blue')
+            .accentPalette('blue');
     }
 
     /**
