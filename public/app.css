@@ -20,11 +20,11 @@ body::before, body::after {
     max-width: 860px;
 }
 
-#container.s {
+#container.sm {
     max-width: 640px;
 }
 
-#container.l {
+#container.lg {
     max-width: 1150px;
 }
 
@@ -91,6 +91,12 @@ md-toolbar h2 md-icon.material-icons {
     background-color: #ffa;
     box-shadow: 0.2em 0.2em 0.5em rgba(0,0,0,0.2);
     z-index: 20;
+}
+
+.read-only .group.group-open:hover {
+    background-color: transparent;
+    box-shadow: none;
+    z-index: auto;
 }
 
 .group + .group {

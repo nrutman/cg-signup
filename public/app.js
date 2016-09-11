@@ -51,6 +51,7 @@
      * @ngdoc Controller
      * @name AppCtrl
      * @description Controller for the main sign-up page
+     * @requires $location
      * @requires $mdDialog
      * @requires $q
      * @requires $timeout
@@ -59,7 +60,7 @@
      * @requires groupService
      * @requires signupService
      */
-    function AppCtrl($mdDialog, $q, $timeout, $window, errorService, groupService, signupService, MAX_MEMBERS) {
+    function AppCtrl($location, $mdDialog, $q, $timeout, $window, errorService, groupService, signupService, MAX_MEMBERS) {
         var self = this;
         self.getContainerClass = getContainerClass;
         self.currentGroup = {};
@@ -75,6 +76,7 @@
         self.isGroupFull = isGroupFull;
         self.isNextButtonDisabled = isNextButtonDisabled;
         self.isPreviousButtonDisabled = isPreviousButtonDisabled;
+        self.isReadOnlyMode = false;
         self.joinGroup = joinGroup;
         self.next = next;
         self.openMap = openMap;
@@ -87,6 +89,7 @@
         var refreshTimer;
 
         initialize();
+        detectReadOnlyMode();
         refreshGroupData(1000 * 60 * 5); // 5 minutes
 
         function initialize() {
@@ -110,9 +113,24 @@
             $timeout.cancel(refreshTimer);
         }
 
+        function detectReadOnlyMode() {
+            self.isReadOnlyMode = Boolean($location.search()['show-groups']);
+            if (self.isReadOnlyMode) {
+                self.currentStep = 3;
+            }
+        }
+
         function getContainerClass() {
-            var containerClasses = ['s', 's', 'l', 's'];
-            return containerClasses[self.currentStep - 1];
+            var sizeClasses = ['sm', 'sm', 'lg', 'sm'];
+            var classes = [];
+
+            classes.push(sizeClasses[self.currentStep - 1]);
+
+            if (self.isReadOnlyMode) {
+                classes.push('read-only');
+            }
+
+            return classes.join(' ');
         }
 
         function getFormattedGroupType(name) {
@@ -183,11 +201,11 @@
         }
 
         function isNextButtonDisabled() {
-            return self.currentStep >= self.totalSteps - 1;
+            return self.isReadOnlyMode || self.currentStep >= self.totalSteps - 1;
         }
 
         function isPreviousButtonDisabled() {
-            return self.currentStep <= 1 || self.currentStep >= self.totalSteps;
+            return self.isReadOnlyMode || (self.currentStep <= 1 || self.currentStep >= self.totalSteps);
         }
 
         function joinGroup(groupId, evt) {

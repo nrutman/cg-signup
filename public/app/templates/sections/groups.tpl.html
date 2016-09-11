@@ -58,7 +58,7 @@
                     &nbsp;
                 </li>
             </ol>
-            <div class="group-controls">
+            <div class="group-controls" ng-if="!app.isReadOnlyMode">
                 <md-button
                     class="md-raised md-primary"
                     ng-click="app.joinGroup(group.id, $event)"
