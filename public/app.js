@@ -434,7 +434,7 @@
     function MdThemeConfig($mdThemingProvider) {
         $mdThemingProvider.theme('default')
             .primaryPalette('blue')
-            .accentPalette('blue');
+            .accentPalette('indigo');
     }
 
     /**
