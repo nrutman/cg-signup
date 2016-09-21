@@ -20,7 +20,7 @@ try {
         echo json_encode(array());
     }
     else if (empty($response) || !$response) {
-        echo json_encode(new stdClass());
+        // do nothing
     } else {
         echo json_encode($response, JSON_NUMERIC_CHECK);
     }

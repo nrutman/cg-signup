@@ -10,9 +10,11 @@
 
 <section>
     <p>Thank you for your interest in Community Groups at Providence Church. This page will allow you to sign-up for a Community Group for our Fall 2016 Core Session.</p>
+
     <blockquote>
-        <strong>Session Start:</strong> October 1, 2016<br>
-        <strong>Session End:</strong> November 30, 2016
+        <strong>Session Start:</strong> <span ng-bind="app.session.start | date : 'EEEE, MMMM d, yyyy'"></span><br>
+        <strong>Session End:</strong> <span ng-bind="app.session.end | date : 'EEEE, MMMM d, yyyy'"></span><br>
+        <strong>Sign Up By:</strong> <span ng-bind="app.session.signup_end | date : 'EEEE, MMMM d, yyyy'"></span>
     </blockquote>
 
     <img src="assets/provchurch-logo.png" class="provchurch-logo" alt="Providence Church">

@@ -17,7 +17,7 @@ class ApiProcessor {
         }
 
         if (!method_exists($this->commands, $method)) {
-            throw new ObjectNotValidException($object);
+            throw new ObjectNotValidException();
         }
 
         return call_user_func(array($this->commands, $method), $data);

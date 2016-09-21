@@ -8,16 +8,25 @@ VALUES (:group_id, :first_name, :last_name, :email, :phone, NOW())
 ;
 SQL;
 
-    const SELECT_GROUPS_SQL = <<<'SQL'
+    const SELECT_CURRENT_SESSION_SQL = <<<'SQL'
 SELECT *
+FROM cg_sessions se
+WHERE NOW() > se.signup_start AND NOW() < se.signup_end
+;
+SQL;
+
+    const SELECT_GROUPS_SQL = <<<'SQL'
+SELECT g.*
 FROM cg_groups g
+JOIN cg_sessions se ON g.session_id = se.id
+WHERE NOW() > se.signup_start AND NOW() < se.signup_end
 ORDER BY g.name ASC
 ;
 SQL;
 
     const SELECT_LAST_SIGNUP_SQL = <<<'SQL'
-SELECT *
-FROM cg_signups
+SELECT s.*
+FROM cg_signups s
 ORDER BY id DESC
 LIMIT 1
 ;
@@ -51,6 +60,8 @@ SQL;
 SELECT s.*, g.name as group_name
 FROM cg_signups s
 JOIN cg_groups g ON s.group_id = g.id
+JOIN cg_sessions se ON g.session_id = se.id
+WHERE NOW() > se.signup_start AND NOW() < se.signup_end
 ORDER BY s.is_leader DESC, s.id ASC
 ;
 SQL;

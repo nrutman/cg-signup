@@ -6,6 +6,7 @@
         // constants
         .constant('MAX_MEMBERS', 12)
         // configuration
+        .config(SugarConfig)
         .config(HttpInterceptorConfig)
         .config(MdThemeConfig)
         // filters
@@ -14,6 +15,7 @@
         .service('apiService', ApiService)
         .service('errorService', ErrorService)
         .service('groupService', GroupService)
+        .service('sessionService', SessionService)
         .service('signupService', SignupService)
         // controllers
         .controller('AppCtrl', AppCtrl)
@@ -60,7 +62,7 @@
      * @requires groupService
      * @requires signupService
      */
-    function AppCtrl($location, $mdDialog, $q, $timeout, $window, errorService, groupService, signupService, MAX_MEMBERS) {
+    function AppCtrl($location, $mdDialog, $q, $timeout, $window, errorService, groupService, sessionService, signupService, MAX_MEMBERS) {
         var self = this;
         self.getContainerClass = getContainerClass;
         self.currentGroup = {};
@@ -82,6 +84,7 @@
         self.next = next;
         self.openMap = openMap;
         self.previous = previous;
+        self.session = null;
         self.totalSteps = 4;
 
         var validationMethods = [angular.noop, validateAboutForm, angular.noop];
@@ -97,6 +100,7 @@
             // query for data
             $q.all({
                 groups: groupService.fetch(),
+                session: sessionService.fetch(),
                 signups: signupService.fetch()
             })
             .then(function(results) {
@@ -105,11 +109,19 @@
                 groupMapById = {};
                 groupMapByName = {};
 
-                // process the groups
-                processGroups(results.groups, results.signups);
+                if (!results.session) {
+                    self.currentStep = 0;
+                    return;
+                }
 
-                // update the status
-                self.isLoading = false;
+                // process the data
+                self.session = results.session;
+                processGroups(results.groups, results.signups);
+            })
+            .finally(function() {
+                $timeout(function() {
+                    self.isLoading = false;
+                }, 300);
             });
         }
 
@@ -205,7 +217,7 @@
         }
 
         function isNextButtonDisabled() {
-            return self.isReadOnlyMode || self.currentStep >= self.totalSteps - 1;
+            return self.isReadOnlyMode || self.currentStep >= self.totalSteps - 1 || self.currentStep < 1;
         }
 
         function isPreviousButtonDisabled() {
@@ -461,7 +473,36 @@
 
     /**
      * @ngdoc Service
-     * @name SignupService
+     * @name sessionService
+     * @description Logic for fetching and storing signups
+     * @requires apiService
+     */
+    function SessionService(apiService) {
+        var self = this;
+        self.fetch = fetch;
+
+        function fetch() {
+            return apiService.request('GET', 'currentSession')
+                .then(function(response) {
+                    if (!response.data) {
+                        return;
+                    }
+
+                    var dateFields = ['start', 'end', 'signup_start', 'signup_end'];
+                    var session = angular.copy(response.data);
+
+                    dateFields.forEach(function(field, i) {
+                        session[field] = Date.create(session[field]);
+                    });
+
+                    return session;
+                });
+        }
+    }
+
+    /**
+     * @ngdoc Service
+     * @name signupService
      * @description Logic for fetching and storing signups
      * @requires apiService
      */
@@ -487,6 +528,10 @@
         function update(signup) {
             return apiService.request('PUT', 'signup', signup);
         }
+    }
+
+    function SugarConfig() {
+        Sugar.extend();
     }
 
     function TimeFilter($filter) {

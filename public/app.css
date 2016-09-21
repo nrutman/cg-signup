@@ -39,6 +39,10 @@ body::before, body::after {
     z-index: 9999;
 }
 
+#loading-container.done {
+    display: none;
+}
+
 #loading-container .dot {
     animation: 2.25s ease-in-out 1s both infinite bounce;
     color: #aaa;
