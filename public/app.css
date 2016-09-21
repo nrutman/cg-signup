@@ -1,3 +1,17 @@
+@keyframes bounce {
+    0% {
+        top: 0;
+    }
+
+    15% {
+        top: -0.1em;
+    }
+
+    30% {
+        top: 0;
+    }
+}
+
 body {
     background-color: #eee;
     font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -10,6 +24,39 @@ body::before, body::after {
     content: "";
     display: block;
     height: 2em;
+}
+
+#loading-container {
+    background-color: inherit;
+    bottom: 0;
+    display: block;
+    left: 0;
+    padding-top: 20%;
+    position: fixed;
+    right: 0;
+    text-align: center;
+    top: 0;
+    z-index: 9999;
+}
+
+#loading-container .dot {
+    animation: 2.25s ease-in-out 1s both infinite bounce;
+    color: #aaa;
+    display: inline-block;
+    font-size: 10em;
+    position: relative;
+}
+
+#loading-container .dot + .dot {
+    animation-delay: 1.3s;
+}
+
+#loading-container .dot + .dot + .dot {
+    animation-delay: 1.6s;
+}
+
+#loading-container .dot:after {
+    content: ".";
 }
 
 #container {

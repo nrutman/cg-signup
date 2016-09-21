@@ -74,6 +74,7 @@
         self.getGroupToolTip = getGroupToolTip;
         self.groups = [];
         self.isGroupFull = isGroupFull;
+        self.isLoading = true;
         self.isNextButtonDisabled = isNextButtonDisabled;
         self.isPreviousButtonDisabled = isPreviousButtonDisabled;
         self.isReadOnlyMode = false;
@@ -106,6 +107,9 @@
 
                 // process the groups
                 processGroups(results.groups, results.signups);
+
+                // update the status
+                self.isLoading = false;
             });
         }
 

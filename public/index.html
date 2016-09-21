@@ -17,12 +17,18 @@
 
     <script src="app.js" charset="utf-8"></script>
 </head>
-<body ng-app="prov.cgSignup">
+<body ng-app="prov.cgSignup" ng-controller="AppCtrl as app">
+    <div
+        id="loading-container"
+        ng-show="app.isLoading">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
     <div
         id="container"
         layout="column"
-        ng-class="app.getContainerClass()"
-        ng-controller="AppCtrl as app">
+        ng-class="app.getContainerClass()">
 
         <header>
             <h1 class="md-display-1">Community Group Sign-Ups</h1>
