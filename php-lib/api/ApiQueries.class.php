@@ -15,6 +15,14 @@ WHERE NOW() > se.signup_start AND NOW() < se.signup_end
 ;
 SQL;
 
+    const SELECT_NEXT_SESSION_SQL = <<<'SQL'
+SELECT *
+FROM cg_sessions se
+WHERE NOW() < se.signup_end
+ORDER BY se.signup_end ASC
+;
+SQL;
+
     const SELECT_GROUPS_SQL = <<<'SQL'
 SELECT g.*
 FROM cg_groups g

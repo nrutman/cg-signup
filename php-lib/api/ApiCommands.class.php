@@ -45,6 +45,10 @@ class ApiCommands {
         return $this->returnOne($this->query(ApiQueries::SELECT_CURRENT_SESSION_SQL)->fetchAll());
     }
 
+    public function getNextSessionAction() {
+        return $this->returnOne($this->query(ApiQueries::SELECT_NEXT_SESSION_SQL)->fetchAll());
+    }
+
     public function getGroupsAction() {
         return $this->query(ApiQueries::SELECT_GROUPS_SQL)->fetchAll();
     }

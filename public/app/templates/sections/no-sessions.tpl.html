@@ -2,16 +2,22 @@
     <div class="md-toolbar-tools">
         <h2 class="md-title">
             <md-icon>lock_outline</md-icon>
-            Sign-Ups Currently Closed
+            Sign-Ups Coming Soon
         </h2>
         <span flex></span>
     </div>
 </md-toolbar>
 
 <section>
-    <h1>Sign-ups are not yet active.</h1>
-    <p>Please <a href="http://provchurch.org/contact" target="_blank">contact the church office</a> for more information about Community Groups at Providence Church.</p>
-
+    <div ng-if="!app.session">
+        <h1>Sign-ups are not yet active.</h1>
+        <p>Please <a href="http://provchurch.org/contact" target="_blank">contact the church office</a> for more information about Community Groups at Providence Church.</p>
+    </div>
+    <div ng-if="app.session">
+        <h1>Sign-up starting <span ng-bind="app.session.signup_start | date : 'fullDate'"></span></h1>
+        <p>There are still a few days until general registration for Community Groups begins. Please check back on <span ng-bind="app.session.signup_start | date : 'fullDate'"></span> to register for your group!</p>
+        <p>Please <a href="http://provchurch.org/contact" target="_blank">contact the church office</a> with any questions. Thank you!</p>
+    </div>
     <img src="assets/provchurch-logo.png" class="provchurch-logo" alt="Providence Church">
 
 </section>

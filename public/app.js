@@ -116,6 +116,9 @@
 
                 // process the data
                 self.session = results.session;
+                if (Date.create(self.session.signup_start).isAfter(Date.create())) {
+                    self.currentStep = 0;
+                }
                 processGroups(results.groups, results.signups);
             })
             .finally(function() {
@@ -482,7 +485,7 @@
         self.fetch = fetch;
 
         function fetch() {
-            return apiService.request('GET', 'currentSession')
+            return apiService.request('GET', 'nextSession')
                 .then(function(response) {
                     if (!response.data) {
                         return;
