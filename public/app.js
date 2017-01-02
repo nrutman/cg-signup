@@ -288,7 +288,7 @@
         }
 
         function openMap() {
-            $window.open('https://drive.google.com/open?id=1h_zzQK-t2RCnXRpnTqfAj0RQIxw');
+            $window.open('https://drive.google.com/open?id=1zVRmDgjTrDnAiA51FWIBl9U3J7I');
         }
 
         function previous() {
