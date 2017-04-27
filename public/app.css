@@ -156,6 +156,8 @@ md-toolbar h2 md-icon.material-icons {
 
 .group h2 {
     color: #1976D2;
+    height: 60px;
+    line-height: 1.2;
     margin-bottom: 0;
 }
 

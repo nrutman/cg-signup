@@ -6,7 +6,7 @@ require_once(__DIR__ . '/../db/DbConnection.class.php');
 
 class ApiCommands {
     protected $db;
-    const MAX_SIGNUPS = 12;
+    const MAX_SIGNUPS = 15;
 
     public function __construct() {
         $this->db = new DbConnection();
