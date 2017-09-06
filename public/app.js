@@ -4,7 +4,7 @@
         // module definition
         .module('prov.cgSignup', ['ngAnimate', 'ngMessages', 'ngMaterial', 'ui.mask'])
         // constants
-        .constant('MAX_MEMBERS', 15)
+        .constant('MAX_MEMBERS', 12)
         // configuration
         .config(SugarConfig)
         .config(HttpInterceptorConfig)
@@ -282,7 +282,7 @@
         }
 
         function openMap() {
-            $window.open('https://drive.google.com/open?id=1zVRmDgjTrDnAiA51FWIBl9U3J7I');
+            $window.open('https://drive.google.com/open?id=1Wxk5e7xZXp0bxDlk0ZmHfLI4Ip4');
         }
 
         function previous() {
