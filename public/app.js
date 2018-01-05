@@ -191,12 +191,11 @@
 
         function getGroupToolTip(type) {
             var groupDescriptions = {
-                'Daytime Group': 'A group that meets during the day for people with alternate schedules.',
-                'Families with Adult Children': 'A group made up of parents who have at least one child 18 or older.',
-                'Mens Group': 'A group of men who come together to sharpen one another and grow together.',
-                'Mixed Group': 'A group made up of both men and women of various ages and seasons of life.',
+                'Daytime': 'A group that meets during the day for people with alternate schedules.',
+                'Men': 'A group of men who come together to sharpen one another and grow together.',
+                'Mixed': 'A group made up of both men and women of various ages and seasons of life.',
                 'Young Families': 'A group made up of parents with young children.',
-                'Womens Group': 'A group of women who seek to grow together and encourage one another.',
+                'Women': 'A group of women who seek to grow together and encourage one another.',
                 'Book Study': 'A group that studies a book written about a biblical topic.',
                 'Bible Study': 'A group that seeks to go through a book of the Bible together.'
             };
