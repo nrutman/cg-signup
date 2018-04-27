@@ -29,8 +29,6 @@ FROM cg_groups g
 JOIN cg_sessions se ON g.session_id = se.id
 WHERE NOW() > se.signup_start AND NOW() < se.signup_end
 ORDER BY
-    FIELD(g.day, 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday') ASC,
-    g.time ASC,
     g.name ASC
 ;
 SQL;
